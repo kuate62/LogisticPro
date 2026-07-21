@@ -1,0 +1,19 @@
+.lp-auth-divider {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-4);
+  margin: var(--spacing-6) 0;
+}
+
+.lp-auth-divider__line {
+  flex: 1;
+  height: 1px;
+  background: var(--color-border);
+}
+
+.lp-auth-divider__text {
+  font-size: var(--font-size-sm);
+  color: var(--color-text-muted);
+  font-weight: var(--font-weight-medium);
+  text-transform: lowercase;
+}

@@ -1,0 +1,16 @@
+.lp-form-error {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--spacing-2);
+  padding: var(--spacing-3) var(--spacing-4);
+  background: var(--color-danger-light);
+  border: 1px solid var(--color-danger);
+  border-radius: var(--radius-md);
+}
+
+.lp-form-error__text {
+  font-size: var(--font-size-sm);
+  color: var(--color-danger);
+  margin: 0;
+  line-height: var(--line-height-normal);
+}

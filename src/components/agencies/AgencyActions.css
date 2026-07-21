@@ -1,0 +1,63 @@
+.lp-agency-actions {
+  display: flex;
+  gap: 4px;
+}
+
+.lp-agency-actions--compact {
+  gap: 2px;
+}
+
+.lp-agency-actions__btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 10px;
+  border: none;
+  border-radius: 6px;
+  font-size: 0.8125rem;
+  font-weight: 500;
+  cursor: pointer;
+  text-decoration: none;
+  transition: background 0.2s, color 0.2s;
+  white-space: nowrap;
+}
+
+.lp-agency-actions__btn--view {
+  background: #f0f9ff;
+  color: #0369a1;
+}
+
+.lp-agency-actions__btn--view:hover {
+  background: #e0f2fe;
+}
+
+.lp-agency-actions__btn--edit {
+  background: #f5f3ff;
+  color: #7c3aed;
+}
+
+.lp-agency-actions__btn--edit:hover {
+  background: #ede9fe;
+}
+
+.lp-agency-actions__btn--deactivate {
+  background: #fef2f2;
+  color: #dc2626;
+}
+
+.lp-agency-actions__btn--deactivate:hover {
+  background: #fee2e2;
+}
+
+.lp-agency-actions__btn--activate {
+  background: #dcfce7;
+  color: #16a34a;
+}
+
+.lp-agency-actions__btn--activate:hover {
+  background: #bbf7d0;
+}
+
+.lp-agency-actions--compact .lp-agency-actions__btn {
+  padding: 5px;
+}

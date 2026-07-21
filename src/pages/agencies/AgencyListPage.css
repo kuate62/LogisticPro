@@ -1,0 +1,132 @@
+.lp-list-page {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.lp-list-page__toolbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.lp-list-page__view-toggle {
+  display: flex;
+  gap: 2px;
+  padding: 2px;
+  background: #f1f5f9;
+  border-radius: 8px;
+}
+
+.lp-list-page__view-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 32px;
+  border: none;
+  border-radius: 6px;
+  background: transparent;
+  color: #94a3b8;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.lp-list-page__view-btn--active {
+  background: #fff;
+  color: #0f172a;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
+}
+
+.lp-list-page__view-btn:hover:not(.lp-list-page__view-btn--active) {
+  color: #64748b;
+}
+
+.lp-list-page__grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
+  gap: 16px;
+}
+
+.lp-list-page__create-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 16px;
+  border: none;
+  border-radius: 8px;
+  background: #2563eb;
+  color: #fff;
+  font-size: 0.875rem;
+  font-weight: 600;
+  text-decoration: none;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+.lp-list-page__create-btn:hover {
+  background: #1d4ed8;
+}
+
+.lp-list-pagination {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  flex-wrap: wrap;
+  padding-top: 8px;
+}
+
+.lp-list-pagination__info {
+  font-size: 0.8125rem;
+  color: #64748b;
+}
+
+.lp-list-pagination__btns {
+  display: flex;
+  gap: 4px;
+}
+
+.lp-list-pagination__btn {
+  padding: 6px 12px;
+  border: 1px solid #e2e8f0;
+  border-radius: 6px;
+  background: #fff;
+  color: #334155;
+  font-size: 0.8125rem;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.lp-list-pagination__btn:hover:not(:disabled) {
+  background: #f8fafc;
+  border-color: #cbd5e1;
+}
+
+.lp-list-pagination__btn:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+.lp-list-pagination__btn--active {
+  background: #2563eb;
+  color: #fff;
+  border-color: #2563eb;
+}
+
+.lp-list-pagination__btn--active:hover {
+  background: #1d4ed8;
+}
+
+@media (max-width: 640px) {
+  .lp-list-page__grid {
+    grid-template-columns: 1fr;
+  }
+
+  .lp-list-pagination {
+    flex-direction: column;
+    align-items: center;
+  }
+}

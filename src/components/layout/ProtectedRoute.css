@@ -1,0 +1,20 @@
+.lp-loading-screen {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 100vh;
+  background: var(--color-bg);
+}
+
+.lp-loading-screen__spinner {
+  width: 40px;
+  height: 40px;
+  border: 3px solid var(--color-border);
+  border-top-color: var(--color-primary);
+  border-radius: var(--radius-full);
+  animation: lp-loading-spin 0.8s linear infinite;
+}
+
+@keyframes lp-loading-spin {
+  to { transform: rotate(360deg); }
+}

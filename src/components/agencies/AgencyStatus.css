@@ -1,0 +1,40 @@
+.lp-agency-status {
+  display: inline-flex;
+  align-items: center;
+  padding: 4px 10px;
+  border-radius: 9999px;
+  font-weight: 600;
+  font-size: 0.75rem;
+  line-height: 1;
+  white-space: nowrap;
+}
+
+.lp-agency-status--sm {
+  padding: 2px 8px;
+  font-size: 0.6875rem;
+}
+
+.lp-agency-status--lg {
+  padding: 6px 14px;
+  font-size: 0.8125rem;
+}
+
+.lp-agency-status--success {
+  background-color: #dcfce7;
+  color: #166534;
+}
+
+.lp-agency-status--secondary {
+  background-color: #f1f5f9;
+  color: #475569;
+}
+
+.lp-agency-status--danger {
+  background-color: #fef2f2;
+  color: #991b1b;
+}
+
+.lp-agency-status--warning {
+  background-color: #fffbeb;
+  color: #92400e;
+}

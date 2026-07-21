@@ -1,0 +1,41 @@
+.lp-auth-logo {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-3);
+}
+
+.lp-auth-logo__icon {
+  flex-shrink: 0;
+}
+
+.lp-auth-logo__text {
+  display: flex;
+  flex-direction: column;
+}
+
+.lp-auth-logo__name {
+  font-size: var(--font-size-xl);
+  font-weight: var(--font-weight-bold);
+  color: var(--color-text-heading);
+  line-height: var(--line-height-tight);
+  letter-spacing: -0.3px;
+}
+
+.lp-auth-logo__tagline {
+  font-size: var(--font-size-xs);
+  color: var(--color-text-secondary);
+  font-weight: var(--font-weight-regular);
+}
+
+.lp-auth-logo--sm .lp-auth-logo__name {
+  font-size: var(--font-size-lg);
+}
+
+.lp-auth-logo--lg .lp-auth-logo__icon svg {
+  width: 40px;
+  height: 40px;
+}
+
+.lp-auth-logo--lg .lp-auth-logo__name {
+  font-size: var(--font-size-2xl);
+}

@@ -1,0 +1,68 @@
+import { Filter, X } from 'lucide-react';
+import { SHIPMENT_STATUS } from '../../config/constants';
+import { mockAgenciesService } from '../../api/mockAgencies';
+import { useAuth } from '../../hooks/useAuth';
+import { useState, useEffect } from 'react';
+
+export default function ShipmentFilters({ filters, onChange, onReset }) {
+  const { companyId } = useAuth();
+  const [agencies, setAgencies] = useState([]);
+  const [show, setShow] = useState(false);
+
+  useEffect(() => { mockAgenciesService.getAll(companyId, { perPage: 100 }).then((r) => setAgencies(r.data || [])); }, [companyId]);
+
+  const activeCount = Object.values(filters).filter((v) => v !== '').length;
+
+  return (
+    <div className="position-relative">
+      <button type="button" className={`btn btn-sm ${show ? 'btn-primary' : 'btn-outline-secondary'} d-flex align-items-center gap-1`} onClick={() => setShow(!show)}>
+        <Filter size={14} /> Filtres {activeCount > 0 && <span className="badge bg-light text-primary ms-1">{activeCount}</span>}
+      </button>
+      {show && (
+        <div className="position-absolute top-100 end-0 mt-2 bg-white rounded-3 shadow-lg p-4 border z-3" style={{ width: 380, zIndex: 1050 }}>
+          <div className="d-flex justify-content-between align-items-center mb-3">
+            <h6 className="fw-semibold mb-0">Filtres</h6>
+            <button type="button" className="btn btn-sm p-0 border-0" onClick={() => setShow(false)}><X size={16} /></button>
+          </div>
+          <div className="row g-3">
+            <div className="col-6">
+              <label className="form-label small text-muted">Statut</label>
+              <select className="form-select form-select-sm" value={filters.status || ''} onChange={(e) => onChange({ status: e.target.value })}>
+                <option value="">Tous</option>
+                {Object.entries(SHIPMENT_STATUS).map(([k, v]) => (
+                  <option key={k} value={v}>{v === 'draft' ? 'Brouillon' : v === 'pending' ? 'En attente' : v === 'validated' ? 'Validée' : v === 'in_transit' ? 'En transport' : v === 'delivered' ? 'Livrée' : v === 'cancelled' ? 'Annulée' : v}</option>
+                ))}
+              </select>
+            </div>
+            <div className="col-6">
+              <label className="form-label small text-muted">Agence départ</label>
+              <select className="form-select form-select-sm" value={filters.originAgencyId || ''} onChange={(e) => onChange({ originAgencyId: e.target.value })}>
+                <option value="">Toutes</option>
+                {agencies.map((a) => <option key={a.id} value={a.id}>{a.name}</option>)}
+              </select>
+            </div>
+            <div className="col-6">
+              <label className="form-label small text-muted">Agence destination</label>
+              <select className="form-select form-select-sm" value={filters.destinationAgencyId || ''} onChange={(e) => onChange({ destinationAgencyId: e.target.value })}>
+                <option value="">Toutes</option>
+                {agencies.map((a) => <option key={a.id} value={a.id}>{a.name}</option>)}
+              </select>
+            </div>
+            <div className="col-6">
+              <label className="form-label small text-muted">Date début</label>
+              <input type="date" className="form-control form-control-sm" value={filters.dateFrom || ''} onChange={(e) => onChange({ dateFrom: e.target.value })} />
+            </div>
+            <div className="col-6">
+              <label className="form-label small text-muted">Date fin</label>
+              <input type="date" className="form-control form-control-sm" value={filters.dateTo || ''} onChange={(e) => onChange({ dateTo: e.target.value })} />
+            </div>
+          </div>
+          <div className="d-flex justify-content-end mt-3 pt-3 border-top">
+            <button type="button" className="btn btn-sm btn-outline-secondary me-2" onClick={onReset}>Réinitialiser</button>
+            <button type="button" className="btn btn-sm btn-primary" onClick={() => setShow(false)}>Appliquer</button>
+          </div>
+        </div>
+      )}
+    </div>
+  );
+}

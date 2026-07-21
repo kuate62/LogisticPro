@@ -1,0 +1,99 @@
+.lp-register-form {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-5);
+  margin-top: var(--spacing-6);
+}
+
+.lp-register-form__row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--spacing-4);
+}
+
+.lp-register-form__consent {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-3);
+}
+
+.lp-register-form__checkbox {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--spacing-2);
+  cursor: pointer;
+  user-select: none;
+}
+
+.lp-register-form__checkbox-input {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+.lp-register-form__checkbox-custom {
+  width: 18px;
+  height: 18px;
+  border: 1.5px solid var(--color-input-border);
+  border-radius: var(--radius-sm);
+  background: var(--color-input-bg);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all var(--transition-fast);
+  flex-shrink: 0;
+  margin-top: 1px;
+}
+
+.lp-register-form__checkbox-custom::after {
+  content: '';
+  width: 10px;
+  height: 6px;
+  border-left: 2px solid white;
+  border-bottom: 2px solid white;
+  transform: rotate(-45deg) scale(0);
+  transition: transform var(--transition-fast);
+  margin-top: -2px;
+}
+
+.lp-register-form__checkbox-input:checked + .lp-register-form__checkbox-custom {
+  background: var(--color-primary);
+  border-color: var(--color-primary);
+}
+
+.lp-register-form__checkbox-input:checked + .lp-register-form__checkbox-custom::after {
+  transform: rotate(-45deg) scale(1);
+}
+
+.lp-register-form__checkbox-input:focus-visible + .lp-register-form__checkbox-custom {
+  box-shadow: 0 0 0 3px var(--color-primary-light);
+}
+
+.lp-register-form__checkbox-label {
+  font-size: var(--font-size-sm);
+  color: var(--color-text);
+  line-height: var(--line-height-normal);
+}
+
+.lp-register-form__checkbox-label a {
+  color: var(--color-primary);
+  font-weight: var(--font-weight-medium);
+}
+
+.lp-register-form__consent-error {
+  font-size: var(--font-size-xs);
+  color: var(--color-danger);
+  margin: -4px 0 0 26px;
+}
+
+@media (max-width: 480px) {
+  .lp-register-form__row {
+    grid-template-columns: 1fr;
+  }
+}

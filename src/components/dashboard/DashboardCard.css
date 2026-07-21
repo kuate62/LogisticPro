@@ -1,0 +1,60 @@
+.lp-dcard {
+  background: var(--color-card);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+}
+
+.lp-dcard__header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: var(--spacing-5) var(--spacing-5) 0;
+}
+
+.lp-dcard__title {
+  font-size: var(--font-size-md);
+  font-weight: var(--font-weight-semibold);
+  color: var(--color-text-heading);
+  margin: 0;
+}
+
+.lp-dcard__subtitle {
+  font-size: var(--font-size-xs);
+  color: var(--color-text-muted);
+  margin: 2px 0 0;
+}
+
+.lp-dcard__body {
+  padding: var(--spacing-4) var(--spacing-5) var(--spacing-5);
+}
+
+.lp-dcard__empty {
+  text-align: center;
+  padding: var(--spacing-8) var(--spacing-4);
+}
+
+.lp-dcard__empty-text {
+  font-size: var(--font-size-sm);
+  color: var(--color-text-muted);
+  margin: 0;
+}
+
+.lp-dcard__loading {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-3);
+}
+
+.lp-dcard__skeleton-row {
+  height: 40px;
+  border-radius: var(--radius-sm);
+  background: linear-gradient(90deg, var(--color-border) 25%, var(--color-bg) 50%, var(--color-border) 75%);
+  background-size: 200% 100%;
+  animation: lp-skeleton-shimmer 1.5s infinite;
+}
+
+@keyframes lp-skeleton-shimmer {
+  0% { background-position: -200% 0; }
+  100% { background-position: 200% 0; }
+}

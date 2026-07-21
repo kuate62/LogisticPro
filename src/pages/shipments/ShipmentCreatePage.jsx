@@ -1,0 +1,201 @@
+import { useState } from 'react';
+import { ArrowLeft, ArrowRight, Send } from 'lucide-react';
+import { Link, useNavigate } from 'react-router-dom';
+import toast from 'react-hot-toast';
+import { useShipmentWizard, useShipmentForm } from '../../hooks/useShipment';
+import ShipmentStepper from '../../components/shipments/ShipmentStepper';
+import ShipmentWeightIndicator from '../../components/shipments/ShipmentWeightIndicator';
+import ShipmentPriceSummary from '../../components/shipments/ShipmentPriceSummary';
+import ShipmentPackageForm from '../../components/shipments/ShipmentPackageForm';
+import { mockClientsService } from '../../api/mockClients';
+import { mockAgenciesService } from '../../api/mockAgencies';
+import { useAuth } from '../../hooks/useAuth';
+
+export default function ShipmentCreatePage() {
+  const { companyId } = useAuth();
+  const navigate = useNavigate();
+  const { wizard, setWizard, setWizardStep, resetWizard, addWizardPackage, updateWizardPackage, removeWizardPackage, getWizardTotals } = useShipmentWizard();
+  const { create } = useShipmentForm();
+  const [submitting, setSubmitting] = useState(false);
+
+  const totals = getWizardTotals();
+  const step = wizard.step;
+
+  const [clients, setClients] = useState([]);
+  const [agencies, setAgencies] = useState([]);
+
+  const loadData = async () => {
+    const [c, a] = await Promise.all([
+      mockClientsService.getAll(companyId, { perPage: 100 }),
+      mockAgenciesService.getAll(companyId, { perPage: 100 }),
+    ]);
+    setClients(c.data || []);
+    setAgencies(a.data || []);
+  };
+
+  const ensureData = () => { if (clients.length === 0 || agencies.length === 0) loadData(); };
+
+  const nextStep = () => {
+    if (step === 1 && !wizard.senderId) { toast.error('Sélectionnez un expéditeur'); return; }
+    if (step === 2 && !wizard.receiverId) { toast.error('Sélectionnez un destinataire'); return; }
+    if (step === 3 && (!wizard.originAgencyId || !wizard.destinationAgencyId)) { toast.error('Sélectionnez les agences de départ et destination'); return; }
+    setWizardStep(step + 1);
+    ensureData();
+  };
+
+  const prevStep = () => { setWizardStep(step - 1); };
+
+  const handleSubmit = async () => {
+    if (totals.packageCount === 0) { toast.error('Ajoutez au moins un colis'); return; }
+    setSubmitting(true);
+    try {
+      const shipment = await create({
+        senderId: wizard.senderId, senderName: wizard.senderName, senderPhone: wizard.senderPhone,
+        receiverId: wizard.receiverId, receiverName: wizard.receiverName, receiverPhone: wizard.receiverPhone,
+        originAgencyId: wizard.originAgencyId, originAgencyName: wizard.originAgencyName, originCity: wizard.originCity,
+        destinationAgencyId: wizard.destinationAgencyId, destinationAgencyName: wizard.destinationAgencyName, destinationCity: wizard.destinationCity,
+        routeId: wizard.routeId || null, routeName: wizard.routeName || '', maxWeight: wizard.maxWeight,
+        packages: wizard.packages, observation: wizard.observation,
+      });
+      toast.success(`Expédition ${shipment.shipmentNumber} créée`);
+      resetWizard();
+      navigate('/shipments');
+    } catch (err) { toast.error(err.message || 'Erreur'); } finally { setSubmitting(false); }
+  };
+
+  const selectClient = (field, clientId) => {
+    const c = clients.find((cl) => cl.id === clientId);
+    if (c) setWizard({ [field + 'Id']: c.id, [field + 'Name']: `${c.firstName} ${c.lastName}`, [field + 'Phone']: c.phone });
+  };
+
+  const selectAgency = (prefix, agencyId) => {
+    const a = agencies.find((ag) => ag.id === agencyId);
+    if (a) setWizard({ [prefix + 'AgencyId']: a.id, [prefix + 'AgencyName']: a.name, [prefix + 'City']: a.city || '' });
+  };
+
+  return (
+    <div>
+      <div className="d-flex align-items-center gap-3 mb-4">
+        <Link to="/shipments" className="btn btn-outline-secondary btn-sm rounded-pill"><ArrowLeft size={16} /></Link>
+        <div>
+          <h4 className="fw-bold text-dark mb-1">Nouvelle expédition</h4>
+          <p className="text-muted mb-0 small">Wizard de création d'expédition</p>
+        </div>
+      </div>
+
+      <ShipmentStepper currentStep={step} />
+
+      <div className="bg-white rounded-3 shadow-sm p-4 mb-4">
+        {step === 1 && (
+          <div>
+            <h6 className="fw-semibold mb-3">Étape 1 — Expéditeur</h6>
+            <p className="text-muted small mb-3">Sélectionnez ou créez l'expéditeur.</p>
+            <label className="form-label small">Client expéditeur *</label>
+            <select className="form-select" value={wizard.senderId} onChange={(e) => selectClient('sender', e.target.value)} onFocus={ensureData}>
+              <option value="">Sélectionner un client</option>
+              {clients.map((c) => <option key={c.id} value={c.id}>{c.firstName} {c.lastName} — {c.phone}</option>)}
+            </select>
+            {wizard.senderId && <div className="mt-2 text-success small">✓ {wizard.senderName} ({wizard.senderPhone})</div>}
+          </div>
+        )}
+
+        {step === 2 && (
+          <div>
+            <h6 className="fw-semibold mb-3">Étape 2 — Destinataire</h6>
+            <p className="text-muted small mb-3">Sélectionnez ou créez le destinataire.</p>
+            <label className="form-label small">Client destinataire *</label>
+            <select className="form-select" value={wizard.receiverId} onChange={(e) => selectClient('receiver', e.target.value)} onFocus={ensureData}>
+              <option value="">Sélectionner un client</option>
+              {clients.map((c) => <option key={c.id} value={c.id}>{c.firstName} {c.lastName} — {c.phone}</option>)}
+            </select>
+            {wizard.receiverId && <div className="mt-2 text-success small">✓ {wizard.receiverName} ({wizard.receiverPhone})</div>}
+          </div>
+        )}
+
+        {step === 3 && (
+          <div>
+            <h6 className="fw-semibold mb-3">Étape 3 — Informations de transport</h6>
+            <div className="row g-3">
+              <div className="col-md-6">
+                <label className="form-label small">Agence de départ *</label>
+                <select className="form-select" value={wizard.originAgencyId} onChange={(e) => selectAgency('origin', e.target.value)} onFocus={ensureData}>
+                  <option value="">Sélectionner</option>
+                  {agencies.map((a) => <option key={a.id} value={a.id}>{a.name} — {a.city}</option>)}
+                </select>
+              </div>
+              <div className="col-md-6">
+                <label className="form-label small">Agence de destination *</label>
+                <select className="form-select" value={wizard.destinationAgencyId} onChange={(e) => selectAgency('destination', e.target.value)} onFocus={ensureData}>
+                  <option value="">Sélectionner</option>
+                  {agencies.map((a) => <option key={a.id} value={a.id}>{a.name} — {a.city}</option>)}
+                </select>
+              </div>
+              <div className="col-md-4">
+                <label className="form-label small">Poids max autorisé (kg)</label>
+                <input type="number" className="form-control" value={wizard.maxWeight} onChange={(e) => setWizard({ maxWeight: parseFloat(e.target.value) || 100 })} />
+              </div>
+            </div>
+          </div>
+        )}
+
+        {step === 4 && (
+          <div>
+            <h6 className="fw-semibold mb-3">Étape 4 — Ajout des colis</h6>
+            <div className="mb-3">
+              <ShipmentWeightIndicator currentWeight={totals.totalWeight} maxWeight={totals.maxWeight} />
+            </div>
+            <ShipmentPackageForm packages={wizard.packages} maxWeight={totals.maxWeight} currentWeight={totals.totalWeight} onAdd={addWizardPackage} onUpdate={updateWizardPackage} onRemove={removeWizardPackage} />
+          </div>
+        )}
+
+        {step === 5 && (
+          <div>
+            <h6 className="fw-semibold mb-3">Étape 5 — Récapitulatif</h6>
+            <div className="row g-4">
+              <div className="col-md-8">
+                <div className="bg-light rounded-3 p-3 mb-3">
+                  <div className="row g-3 small">
+                    <div className="col-6"><strong>Expéditeur:</strong> {wizard.senderName}<br /><span className="text-muted">{wizard.senderPhone}</span></div>
+                    <div className="col-6"><strong>Destinataire:</strong> {wizard.receiverName}<br /><span className="text-muted">{wizard.receiverPhone}</span></div>
+                    <div className="col-6"><strong>Départ:</strong> {wizard.originAgencyName} ({wizard.originCity})</div>
+                    <div className="col-6"><strong>Destination:</strong> {wizard.destinationAgencyName} ({wizard.destinationCity})</div>
+                  </div>
+                </div>
+                {wizard.packages.length > 0 && (
+                  <div className="table-responsive">
+                    <table className="table table-sm small mb-0">
+                      <thead><tr><th>#</th><th>Libellé</th><th>Poids</th><th>Montant</th></tr></thead>
+                      <tbody>
+                        {wizard.packages.map((p, i) => (
+                          <tr key={i}><td>{i + 1}</td><td>{p.label}</td><td>{p.weight} kg</td><td>{(p.totalAmount || 0).toLocaleString('fr-FR')} FC</td></tr>
+                        ))}
+                      </tbody>
+                    </table>
+                  </div>
+                )}
+              </div>
+              <div className="col-md-4">
+                <ShipmentPriceSummary packages={wizard.packages} maxWeight={totals.maxWeight} />
+              </div>
+            </div>
+          </div>
+        )}
+      </div>
+
+      <div className="d-flex justify-content-between">
+        <div>
+          {step > 1 && <button type="button" className="btn btn-outline-secondary d-flex align-items-center gap-1" onClick={prevStep}><ArrowLeft size={14} /> Précédent</button>}
+        </div>
+        <div>
+          {step < 5 ? (
+            <button type="button" className="btn btn-primary d-flex align-items-center gap-1" onClick={nextStep}>Suivant <ArrowRight size={14} /></button>
+          ) : (
+            <button type="button" className="btn btn-success d-flex align-items-center gap-1" onClick={handleSubmit} disabled={submitting}>
+              <Send size={14} /> {submitting ? 'Envoi...' : 'Confirmer l\'expédition'}
+            </button>
+          )}
+        </div>
+      </div>
+    </div>
+  );
+}

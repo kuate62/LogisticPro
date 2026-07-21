@@ -1,0 +1,62 @@
+.lp-input-group {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.lp-input-group--icon .lp-input {
+  padding-left: 40px;
+}
+
+.lp-input-group__icon {
+  position: absolute;
+  left: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--color-text-muted);
+  pointer-events: none;
+  z-index: 1;
+}
+
+.lp-input {
+  width: 100%;
+  height: 42px;
+  padding: 0 var(--spacing-3);
+  font-size: var(--font-size-base);
+  font-weight: var(--font-weight-regular);
+  color: var(--color-text-heading);
+  background: var(--color-input-bg);
+  border: 1px solid var(--color-input-border);
+  border-radius: var(--radius-md);
+  outline: none;
+  transition: border-color var(--transition-fast), box-shadow var(--transition-fast);
+}
+
+.lp-input:hover {
+  border-color: var(--color-text-muted);
+}
+
+.lp-input:focus {
+  border-color: var(--color-border-focus);
+  box-shadow: 0 0 0 3px var(--color-primary-light);
+}
+
+.lp-input::placeholder {
+  color: var(--color-input-placeholder);
+}
+
+.lp-input:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+  background: var(--color-bg);
+}
+
+.lp-input--error {
+  border-color: var(--color-danger);
+}
+
+.lp-input--error:focus {
+  border-color: var(--color-danger);
+  box-shadow: 0 0 0 3px var(--color-danger-light);
+}

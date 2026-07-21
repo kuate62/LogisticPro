@@ -1,0 +1,91 @@
+import { useState } from 'react';
+import { Link } from 'react-router-dom';
+import { Plus, LayoutGrid, List as ListIcon, Users } from 'lucide-react';
+import { useEmployees } from '../../hooks/useEmployee';
+import SearchBar from '../../components/rbac/SearchBar';
+import ListSkeleton from '../../components/rbac/ListSkeleton';
+import EmptyState from '../../components/rbac/EmptyState';
+import EmployeeTable from '../../components/rbac/EmployeeTable';
+import PaginationBar from '../../components/rbac/PaginationBar';
+import { EMPLOYEE_STATUS, EMPLOYEE_POSITIONS } from '../../config/constants';
+import toast from 'react-hot-toast';
+
+export default function EmployeeListPage() {
+  const { employees, loading, error, search, filters, sort, pagination, setSearch, setFilters, setSort, setPage, toggleStatus } = useEmployees();
+  const [view, setView] = useState('table');
+
+  const handleToggle = async (id) => {
+    try { await toggleStatus(id); toast.success('Statut mis à jour'); } catch { toast.error('Erreur'); }
+  };
+
+  return (
+    <div>
+      <div className="d-flex align-items-center justify-content-between mb-4">
+        <div>
+          <h4 className="fw-bold text-dark mb-1 d-flex align-items-center gap-2"><Users size={24} className="text-primary" /> Gestion des Employés</h4>
+          <p className="text-muted mb-0 small">Liste des employés de votre entreprise</p>
+        </div>
+        <Link to="/employees/new" className="btn btn-primary d-flex align-items-center gap-2"><Plus size={16} /> Ajouter un employé</Link>
+      </div>
+
+      <div className="bg-white rounded-3 shadow-sm p-3 mb-4">
+        <div className="d-flex align-items-center justify-content-between flex-wrap gap-3">
+          <div className="d-flex align-items-center gap-3">
+            <SearchBar value={search} onChange={setSearch} placeholder="Nom, email, matricule..." />
+            <select className="form-select form-select-sm" style={{ width: 160 }} value={filters.status} onChange={(e) => setFilters({ status: e.target.value })}>
+              <option value="">Tous les statuts</option>
+              {Object.entries(EMPLOYEE_STATUS).map(([k, v]) => <option key={k} value={v}>{v === 'active' ? 'Actif' : 'Inactif'}</option>)}
+            </select>
+            <select className="form-select form-select-sm" style={{ width: 180 }} value={filters.position} onChange={(e) => setFilters({ position: e.target.value })}>
+              <option value="">Tous les postes</option>
+              {Object.entries(EMPLOYEE_POSITIONS).map(([k, v]) => <option key={k} value={k}>{v}</option>)}
+            </select>
+          </div>
+          <div className="d-flex align-items-center gap-2">
+            <div className="btn-group btn-group-sm">
+              <button type="button" className={`btn ${view === 'table' ? 'btn-primary' : 'btn-outline-primary'}`} onClick={() => setView('table')}><ListIcon size={14} /></button>
+              <button type="button" className={`btn ${view === 'grid' ? 'btn-primary' : 'btn-outline-primary'}`} onClick={() => setView('grid')}><LayoutGrid size={14} /></button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {loading.list ? <ListSkeleton /> : error ? (
+        <div className="alert alert-danger">{error}</div>
+      ) : employees.length === 0 ? (
+        <EmptyState type="employee" onCreateLink="/employees/new" />
+      ) : view === 'table' ? (
+        <div className="bg-white rounded-3 shadow-sm p-3">
+          <EmployeeTable employees={employees} sort={sort} onSort={setSort} onToggle={handleToggle} />
+          <PaginationBar pagination={pagination} onPageChange={setPage} />
+        </div>
+      ) : (
+        <>
+          <div className="row g-3">
+            {employees.map((emp) => (
+              <div key={emp.id} className="col-md-6 col-lg-4">
+                <div className="bg-white rounded-3 shadow-sm p-3 h-100">
+                  <div className="d-flex align-items-center gap-3 mb-2">
+                    <div className="bg-primary text-white rounded-circle d-flex align-items-center justify-content-center fw-semibold" style={{ width: 40, height: 40, fontSize: 14 }}>
+                      {(emp.firstName[0] || '') + (emp.lastName[0] || '')}
+                    </div>
+                    <div>
+                      <div className="fw-medium">{emp.firstName} {emp.lastName}</div>
+                      <small className="text-muted">{EMPLOYEE_POSITIONS[emp.position] || emp.position}</small>
+                    </div>
+                  </div>
+                  <div className="small text-muted mb-2">{emp.city} — {emp.email}</div>
+                  <div className="d-flex justify-content-between align-items-center">
+                    <span className={`badge ${emp.status === 'active' ? 'bg-success' : 'bg-secondary'}`}>{emp.status === 'active' ? 'Actif' : 'Inactif'}</span>
+                    <Link to={`/employees/${emp.id}`} className="btn btn-sm btn-outline-primary">Voir</Link>
+                  </div>
+                </div>
+              </div>
+            ))}
+          </div>
+          <PaginationBar pagination={pagination} onPageChange={setPage} />
+        </>
+      )}
+    </div>
+  );
+}

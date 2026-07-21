@@ -1,0 +1,19 @@
+.lp-auth-header {
+  text-align: center;
+  margin-bottom: var(--spacing-8);
+}
+
+.lp-auth-header__title {
+  font-size: var(--font-size-3xl);
+  font-weight: var(--font-weight-bold);
+  color: var(--color-text-heading);
+  margin-bottom: var(--spacing-2);
+  letter-spacing: -0.5px;
+}
+
+.lp-auth-header__subtitle {
+  font-size: var(--font-size-base);
+  color: var(--color-text-secondary);
+  line-height: var(--line-height-relaxed);
+  margin: 0;
+}

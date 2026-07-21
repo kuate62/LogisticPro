@@ -1,0 +1,9 @@
+.lp-auth-card {
+  width: 100%;
+  max-width: 420px;
+  background: var(--color-card);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-xl);
+  padding: var(--spacing-10);
+  box-shadow: var(--shadow-lg);
+}

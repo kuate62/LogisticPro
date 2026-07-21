@@ -1,0 +1,17 @@
+.lp-auth-footer {
+  text-align: center;
+  margin-top: var(--spacing-6);
+  font-size: var(--font-size-sm);
+  color: var(--color-text-secondary);
+  line-height: var(--line-height-relaxed);
+}
+
+.lp-auth-footer a {
+  color: var(--color-primary);
+  font-weight: var(--font-weight-medium);
+  text-decoration: none;
+}
+
+.lp-auth-footer a:hover {
+  text-decoration: underline;
+}

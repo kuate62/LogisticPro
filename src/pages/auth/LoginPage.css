@@ -1,0 +1,85 @@
+.lp-login-form {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-5);
+  margin-top: var(--spacing-6);
+}
+
+.lp-login-form__options {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.lp-login-form__checkbox {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-2);
+  cursor: pointer;
+  user-select: none;
+}
+
+.lp-login-form__checkbox-input {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+.lp-login-form__checkbox-custom {
+  width: 18px;
+  height: 18px;
+  border: 1.5px solid var(--color-input-border);
+  border-radius: var(--radius-sm);
+  background: var(--color-input-bg);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all var(--transition-fast);
+  flex-shrink: 0;
+}
+
+.lp-login-form__checkbox-custom::after {
+  content: '';
+  width: 10px;
+  height: 6px;
+  border-left: 2px solid white;
+  border-bottom: 2px solid white;
+  transform: rotate(-45deg) scale(0);
+  transition: transform var(--transition-fast);
+  margin-top: -2px;
+}
+
+.lp-login-form__checkbox-input:checked + .lp-login-form__checkbox-custom {
+  background: var(--color-primary);
+  border-color: var(--color-primary);
+}
+
+.lp-login-form__checkbox-input:checked + .lp-login-form__checkbox-custom::after {
+  transform: rotate(-45deg) scale(1);
+}
+
+.lp-login-form__checkbox-input:focus-visible + .lp-login-form__checkbox-custom {
+  box-shadow: 0 0 0 3px var(--color-primary-light);
+}
+
+.lp-login-form__checkbox-label {
+  font-size: var(--font-size-sm);
+  color: var(--color-text);
+}
+
+.lp-login-form__forgot {
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-medium);
+  color: var(--color-primary);
+  text-decoration: none;
+}
+
+.lp-login-form__forgot:hover {
+  text-decoration: underline;
+}
