@@ -1,0 +1,189 @@
+.lp-agencies-page {
+  padding: 40px 0 0;
+}
+
+.lp-agencies-search {
+  margin-bottom: 20px;
+}
+
+.lp-agencies-search__input {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background: white;
+  border: 1px solid var(--color-border);
+  border-radius: 8px;
+  padding: 0 16px;
+  max-width: 400px;
+  transition: border-color 150ms;
+}
+
+.lp-agencies-search__input:focus-within {
+  border-color: var(--color-primary);
+  box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
+}
+
+.lp-agencies-search__input input {
+  border: none;
+  outline: none;
+  padding: 12px 8px;
+  font-size: 14px;
+  flex: 1;
+  background: transparent;
+  font-family: var(--font-family);
+}
+
+.lp-agencies-search__input svg {
+  color: var(--color-text-muted);
+  flex-shrink: 0;
+}
+
+.lp-agencies-filters {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.lp-agencies-filter {
+  padding: 8px 16px;
+  border: 1px solid var(--color-border);
+  border-radius: 20px;
+  background: white;
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--color-text-secondary);
+  cursor: pointer;
+  transition: all 150ms;
+  font-family: var(--font-family);
+}
+
+.lp-agencies-filter:hover {
+  border-color: var(--color-primary);
+  color: var(--color-primary);
+}
+
+.lp-agencies-filter--active {
+  background: var(--color-primary);
+  color: white;
+  border-color: var(--color-primary);
+}
+
+.lp-agencies-grid {
+  padding: 32px 0 64px;
+}
+
+.lp-agency-card {
+  background: white;
+  border-radius: 12px;
+  padding: 24px;
+  border: 1px solid var(--color-border);
+  height: 100%;
+  transition: all 200ms;
+}
+
+.lp-agency-card:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-md);
+}
+
+.lp-agency-card__header {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 16px;
+}
+
+.lp-agency-card__dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--color-success);
+  flex-shrink: 0;
+}
+
+.lp-agency-card__name {
+  font-size: 16px;
+  font-weight: 700;
+  color: var(--color-text-heading);
+  margin: 0;
+}
+
+.lp-agency-card__info {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-bottom: 16px;
+}
+
+.lp-agency-card__info-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 8px;
+  font-size: 13px;
+  color: var(--color-text-secondary);
+}
+
+.lp-agency-card__info-item svg {
+  margin-top: 2px;
+  flex-shrink: 0;
+  color: var(--color-text-muted);
+}
+
+.lp-agency-card__services {
+  display: flex;
+  gap: 6px;
+  flex-wrap: wrap;
+}
+
+.lp-agency-card__service-badge {
+  padding: 3px 10px;
+  border-radius: 12px;
+  background: var(--color-primary-light);
+  color: var(--color-primary);
+  font-size: 11px;
+  font-weight: 600;
+}
+
+.lp-agency-card__map-btn {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin-top: 16px;
+  padding: 8px 16px;
+  border: 1px solid var(--color-border);
+  border-radius: 8px;
+  background: transparent;
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--color-text);
+  cursor: pointer;
+  transition: all 150ms;
+  font-family: var(--font-family);
+}
+
+.lp-agency-card__map-btn:hover {
+  border-color: var(--color-primary);
+  color: var(--color-primary);
+}
+
+.lp-map-section {
+  padding: 0 0 64px;
+}
+
+.lp-map-placeholder {
+  background: var(--color-bg);
+  border: 2px dashed var(--color-border);
+  border-radius: 12px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 300px;
+  color: var(--color-text-muted);
+  gap: 8px;
+}
+
+.lp-map-placeholder__text {
+  font-size: 14px;
+  font-weight: 500;
+}

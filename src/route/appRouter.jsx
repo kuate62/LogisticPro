@@ -34,7 +34,6 @@ const appRouter = [
       ...placeholderRouter,
     ],
   },
-  { path: '/', element: <Navigate to="/landing" replace /> },
   { path: '*', element: <Navigate to="/login" replace /> },
 ];
 
