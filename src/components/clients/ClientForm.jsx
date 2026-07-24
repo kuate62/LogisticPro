@@ -128,14 +128,14 @@ export default function ClientForm({ initialData, isEdit = false, onSubmit }) {
             <Col md={4}>
               <Form.Group className="mb-3">
                 <Form.Label>Téléphone principal *</Form.Label>
-                <Form.Control {...register('phone')} isInvalid={!!errors.phone} placeholder="+243..." />
+                <Form.Control {...register('phone')} isInvalid={!!errors.phone} placeholder="+237..." />
                 <Form.Control.Feedback type="invalid">{errors.phone?.message}</Form.Control.Feedback>
               </Form.Group>
             </Col>
             <Col md={4}>
               <Form.Group className="mb-3">
                 <Form.Label>Téléphone secondaire</Form.Label>
-                <Form.Control {...register('phoneSecondary')} placeholder="+243..." />
+                <Form.Control {...register('phoneSecondary')} placeholder="+237..." />
               </Form.Group>
             </Col>
             <Col md={4}>

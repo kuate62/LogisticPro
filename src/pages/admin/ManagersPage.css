@@ -1,0 +1,198 @@
+.sa-managers {
+  padding: var(--spacing-lg);
+  max-width: var(--content-max-width);
+  margin: 0 auto;
+}
+
+.sa-managers__filters {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-4);
+  margin-bottom: var(--spacing-lg);
+  flex-wrap: wrap;
+}
+
+.sa-managers__search {
+  position: relative;
+  flex: 1;
+  min-width: 220px;
+  max-width: 360px;
+}
+
+.sa-managers__search-icon {
+  position: absolute;
+  left: var(--spacing-3);
+  top: 50%;
+  transform: translateY(-50%);
+  color: var(--color-text-muted);
+  pointer-events: none;
+}
+
+.sa-managers__search-input {
+  width: 100%;
+  padding: var(--spacing-2) var(--spacing-3) var(--spacing-2) var(--spacing-8);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  background: var(--color-input-bg);
+  font-size: var(--font-size-sm);
+  color: var(--color-text);
+  outline: none;
+  transition: border-color var(--transition-fast);
+}
+
+.sa-managers__search-input:focus {
+  border-color: var(--color-border-focus);
+}
+
+.sa-managers__status-filters {
+  display: flex;
+  gap: var(--spacing-1);
+  background: var(--color-bg);
+  padding: var(--spacing-1);
+  border-radius: var(--radius-md);
+}
+
+.sa-managers__filter-btn {
+  padding: var(--spacing-1) var(--spacing-3);
+  border: none;
+  border-radius: var(--radius-sm);
+  background: transparent;
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-medium);
+  color: var(--color-text-secondary);
+  cursor: pointer;
+  transition: all var(--transition-fast);
+  white-space: nowrap;
+}
+
+.sa-managers__filter-btn:hover {
+  color: var(--color-text);
+  background: var(--color-card);
+}
+
+.sa-managers__filter-btn--active {
+  background: var(--color-card);
+  color: var(--color-text);
+  box-shadow: var(--shadow-sm);
+}
+
+.sa-managers__table-wrap {
+  background: var(--color-card);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-sm);
+  border: 1px solid var(--color-border);
+  overflow-x: auto;
+}
+
+.sa-managers__table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.sa-managers__table thead {
+  background: var(--color-bg);
+}
+
+.sa-managers__table th {
+  padding: var(--spacing-3) var(--spacing-4);
+  text-align: left;
+  font-size: var(--font-size-xs);
+  font-weight: var(--font-weight-semibold);
+  color: var(--color-text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  white-space: nowrap;
+  border-bottom: 1px solid var(--color-border);
+}
+
+.sa-managers__table td {
+  padding: var(--spacing-3) var(--spacing-4);
+  font-size: var(--font-size-sm);
+  color: var(--color-text);
+  border-bottom: 1px solid var(--color-border);
+  vertical-align: middle;
+}
+
+.sa-managers__table tbody tr:last-child td {
+  border-bottom: none;
+}
+
+.sa-managers__table tbody tr:hover {
+  background-color: var(--color-bg);
+}
+
+.sa-managers__user {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-3);
+}
+
+.sa-managers__avatar {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 36px;
+  border-radius: var(--radius-full);
+  background-color: var(--color-primary-light);
+  color: var(--color-primary);
+  font-size: var(--font-size-xs);
+  font-weight: var(--font-weight-semibold);
+  flex-shrink: 0;
+}
+
+.sa-managers__name {
+  font-weight: var(--font-weight-medium);
+  white-space: nowrap;
+}
+
+.sa-managers__email {
+  color: var(--color-text-secondary);
+}
+
+.sa-managers__company {
+  font-weight: var(--font-weight-medium);
+}
+
+.sa-managers__phone {
+  color: var(--color-text-secondary);
+  white-space: nowrap;
+}
+
+.sa-managers__date {
+  color: var(--color-text-secondary);
+  white-space: nowrap;
+}
+
+@media (max-width: 1024px) {
+  .sa-managers__table th:nth-child(5),
+  .sa-managers__table td:nth-child(5) {
+    display: none;
+  }
+}
+
+@media (max-width: 768px) {
+  .sa-managers {
+    padding: var(--spacing-md);
+  }
+
+  .sa-managers__filters {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .sa-managers__search {
+    max-width: none;
+  }
+
+  .sa-managers__status-filters {
+    justify-content: center;
+  }
+
+  .sa-managers__table th:nth-child(4),
+  .sa-managers__table td:nth-child(4),
+  .sa-managers__table th:nth-child(5),
+  .sa-managers__table td:nth-child(5) {
+    display: none;
+  }
+}

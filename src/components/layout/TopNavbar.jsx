@@ -1,20 +1,19 @@
 import { useState, useRef, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../../hooks/useAuth';
-import { useDashboard } from '../../hooks/useDashboard';
-import { ROLE_LABELS } from '../../config/constants';
+import { ROLE_LABELS, ROLES } from '../../config/constants';
 import { Search, Bell, ChevronDown, User, Settings, LogOut, Menu } from 'lucide-react';
 import './TopNavbar.css';
 
 export function TopNavbar({ onToggleSidebar }) {
   const { user, logout } = useAuth();
-  const { unreadCount, notifications, markAllNotificationsRead, formatTime } = useDashboard();
   const navigate = useNavigate();
   const [userMenuOpen, setUserMenuOpen] = useState(false);
   const [notifOpen, setNotifOpen] = useState(false);
   const [searchValue, setSearchValue] = useState('');
   const userMenuRef = useRef(null);
   const notifRef = useRef(null);
+  const isSuperAdmin = user?.role === ROLES.SUPER_ADMIN;
 
   useEffect(() => {
     const handler = (e) => {
@@ -37,6 +36,10 @@ export function TopNavbar({ onToggleSidebar }) {
     year: 'numeric',
   }).format(new Date());
 
+  const profilePath = isSuperAdmin ? '/admin' : '/settings';
+  const settingsPath = isSuperAdmin ? '/admin' : '/settings';
+  const searchPlaceholder = isSuperAdmin ? 'Rechercher entreprises, abonnements...' : 'Rechercher colis, clients, expéditions...';
+
   return (
     <header className="lp-topnavbar">
       <div className="lp-topnavbar__left">
@@ -49,7 +52,7 @@ export function TopNavbar({ onToggleSidebar }) {
         </button>
         <div className="lp-topnavbar__welcome">
           <h2 className="lp-topnavbar__greeting">
-            Bonjour, {user?.firstName}
+            {isSuperAdmin ? 'Panneau d\'administration' : `Bonjour, ${user?.firstName}`}
           </h2>
           <p className="lp-topnavbar__date">{today}</p>
         </div>
@@ -61,7 +64,7 @@ export function TopNavbar({ onToggleSidebar }) {
           <input
             type="text"
             className="lp-topnavbar__search-input"
-            placeholder="Rechercher colis, clients, expéditions..."
+            placeholder={searchPlaceholder}
             value={searchValue}
             onChange={(e) => setSearchValue(e.target.value)}
             aria-label="Recherche globale"
@@ -74,42 +77,18 @@ export function TopNavbar({ onToggleSidebar }) {
           <button
             className="lp-topnavbar__icon-btn"
             onClick={() => setNotifOpen(!notifOpen)}
-            aria-label={`Notifications (${unreadCount} non lues)`}
+            aria-label="Notifications"
           >
             <Bell size={20} />
-            {unreadCount > 0 && (
-              <span className="lp-topnavbar__badge">{unreadCount}</span>
-            )}
           </button>
 
           {notifOpen && (
             <div className="lp-topnavbar__dropdown lp-topnavbar__dropdown--notif">
               <div className="lp-topnavbar__dropdown-header">
                 <span className="lp-topnavbar__dropdown-title">Notifications</span>
-                <button
-                  className="lp-topnavbar__dropdown-action"
-                  onClick={markAllNotificationsRead}
-                >
-                  Tout marquer lu
-                </button>
               </div>
               <div className="lp-topnavbar__dropdown-list">
-                {notifications.length === 0 && (
-                  <p className="lp-topnavbar__dropdown-empty">Aucune notification</p>
-                )}
-                {notifications.map((n) => (
-                  <div
-                    key={n.id}
-                    className={`lp-notif-item ${!n.read ? 'lp-notif-item--unread' : ''}`}
-                  >
-                    <div className={`lp-notif-item__dot lp-notif-item__dot--${n.type}`} />
-                    <div className="lp-notif-item__content">
-                      <p className="lp-notif-item__title">{n.title}</p>
-                      <p className="lp-notif-item__message">{n.message}</p>
-                      <span className="lp-notif-item__time">{formatTime(n.time)}</span>
-                    </div>
-                  </div>
-                ))}
+                <p className="lp-topnavbar__dropdown-empty">Aucune notification</p>
               </div>
             </div>
           )}
@@ -134,10 +113,10 @@ export function TopNavbar({ onToggleSidebar }) {
 
           {userMenuOpen && (
             <div className="lp-topnavbar__dropdown">
-              <button className="lp-topnavbar__dropdown-item" onClick={() => { setUserMenuOpen(false); navigate('/settings'); }}>
+              <button className="lp-topnavbar__dropdown-item" onClick={() => { setUserMenuOpen(false); navigate(profilePath); }}>
                 <User size={16} /> Mon profil
               </button>
-              <button className="lp-topnavbar__dropdown-item" onClick={() => { setUserMenuOpen(false); navigate('/settings'); }}>
+              <button className="lp-topnavbar__dropdown-item" onClick={() => { setUserMenuOpen(false); navigate(settingsPath); }}>
                 <Settings size={16} /> Paramètres
               </button>
               <div className="lp-topnavbar__dropdown-divider" />

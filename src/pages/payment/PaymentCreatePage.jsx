@@ -71,7 +71,7 @@ export default function PaymentCreatePage() {
                   <Col md={6}>
                     <Form.Group>
                       <Form.Label>Téléphone client *</Form.Label>
-                      <Form.Control {...register('clientPhone')} isInvalid={!!errors.clientPhone} placeholder="+243..." />
+                      <Form.Control {...register('clientPhone')} isInvalid={!!errors.clientPhone} placeholder="+237..." />
                       <Form.Control.Feedback type="invalid">{errors.clientPhone?.message}</Form.Control.Feedback>
                     </Form.Group>
                   </Col>

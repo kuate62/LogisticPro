@@ -1,0 +1,27 @@
+.sa-loading-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: var(--spacing-xl);
+  min-height: 200px;
+}
+
+.sa-loading-state__spinner {
+  width: 36px;
+  height: 36px;
+  border: 3px solid var(--color-border);
+  border-top-color: var(--color-primary);
+  border-radius: var(--radius-full);
+  animation: sa-spin 0.8s linear infinite;
+}
+
+.sa-loading-state__message {
+  font-size: var(--font-size-sm);
+  color: var(--color-text-muted);
+  margin: var(--spacing-md) 0 0;
+}
+
+@keyframes sa-spin {
+  to { transform: rotate(360deg); }
+}

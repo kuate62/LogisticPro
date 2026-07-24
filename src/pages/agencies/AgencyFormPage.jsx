@@ -30,12 +30,12 @@ export function AgencyFormSections({ form }) {
           </div>
           <div className="lp-agency-form__field">
             <label className="lp-form-label">Téléphone <span className="lp-form-required">*</span></label>
-            <input className={`lp-form-input ${errors.phone ? 'lp-form-input--error' : ''}`} {...getFieldProps('phone')} placeholder="+243 81 234 5678" />
+            <input className={`lp-form-input ${errors.phone ? 'lp-form-input--error' : ''}`} {...getFieldProps('phone')} placeholder="+237 691 234 567" />
             {errors.phone && <span className="lp-form-error">{errors.phone}</span>}
           </div>
           <div className="lp-agency-form__field">
             <label className="lp-form-label">Email <span className="lp-form-required">*</span></label>
-            <input className={`lp-form-input ${errors.email ? 'lp-form-input--error' : ''}`} {...getFieldProps('email')} type="email" placeholder="agence@transport.cd" />
+            <input className={`lp-form-input ${errors.email ? 'lp-form-input--error' : ''}`} {...getFieldProps('email')} type="email" placeholder="agence@transport.cm" />
             {errors.email && <span className="lp-form-error">{errors.email}</span>}
           </div>
           <div className="lp-agency-form__field lp-agency-form__field--full">
@@ -86,12 +86,12 @@ export function AgencyFormSections({ form }) {
           </div>
           <div className="lp-agency-form__field">
             <label className="lp-form-label">Email du responsable <span className="lp-form-required">*</span></label>
-            <input className={`lp-form-input ${errors.managerEmail ? 'lp-form-input--error' : ''}`} {...getFieldProps('managerEmail')} type="email" placeholder="responsable@transport.cd" />
+            <input className={`lp-form-input ${errors.managerEmail ? 'lp-form-input--error' : ''}`} {...getFieldProps('managerEmail')} type="email" placeholder="responsable@transport.cm" />
             {errors.managerEmail && <span className="lp-form-error">{errors.managerEmail}</span>}
           </div>
           <div className="lp-agency-form__field">
             <label className="lp-form-label">Téléphone du responsable <span className="lp-form-required">*</span></label>
-            <input className={`lp-form-input ${errors.managerPhone ? 'lp-form-input--error' : ''}`} {...getFieldProps('managerPhone')} placeholder="+243 83 456 7890" />
+            <input className={`lp-form-input ${errors.managerPhone ? 'lp-form-input--error' : ''}`} {...getFieldProps('managerPhone')} placeholder="+237 693 456 789" />
             {errors.managerPhone && <span className="lp-form-error">{errors.managerPhone}</span>}
           </div>
         </div>

@@ -96,7 +96,7 @@ export default function EmployeeForm({ initialData, isEdit = false, onSubmit }) 
             <Col md={3}>
               <Form.Group className="mb-3">
                 <Form.Label>Téléphone *</Form.Label>
-                <Form.Control {...register('phone')} isInvalid={!!errors.phone} placeholder="+243..." />
+                <Form.Control {...register('phone')} isInvalid={!!errors.phone} placeholder="+237..." />
                 <Form.Control.Feedback type="invalid">{errors.phone?.message}</Form.Control.Feedback>
               </Form.Group>
             </Col>

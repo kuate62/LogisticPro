@@ -1,19 +1,7 @@
 {
 	"folders": [
 		{
-			"path": "../../express Js/Project_Nodejs"
-		},
-		{
-			"path": "../LogisticsPro"
-		},
-		{
 			"path": "."
-		},
-		{
-			"path": "../../Projet_react"
-		},
-		{
-			"path": "../../react"
 		}
 	]
 }

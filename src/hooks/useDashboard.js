@@ -20,7 +20,7 @@ export function useDashboard() {
   const criticalAlerts = store.alerts.filter((a) => a.severity === 'danger' || a.severity === 'warning');
 
   const formatCurrency = useCallback((val) => {
-    return new Intl.NumberFormat('fr-CD', {
+    return new Intl.NumberFormat('fr-CM', {
       style: 'decimal',
       maximumFractionDigits: 0,
     }).format(val) + ' FC';

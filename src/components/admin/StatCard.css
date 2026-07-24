@@ -1,0 +1,63 @@
+.sa-stat-card {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-md);
+  padding: var(--spacing-lg);
+  background-color: var(--color-card);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-sm);
+}
+
+.sa-stat-card__icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 48px;
+  height: 48px;
+  border-radius: var(--radius-full);
+  flex-shrink: 0;
+}
+
+.sa-stat-card--primary .sa-stat-card__icon {
+  background-color: var(--color-primary-light);
+  color: var(--color-primary);
+}
+
+.sa-stat-card--success .sa-stat-card__icon {
+  background-color: color-mix(in srgb, var(--color-success) 12%, transparent);
+  color: var(--color-success);
+}
+
+.sa-stat-card--warning .sa-stat-card__icon {
+  background-color: color-mix(in srgb, var(--color-warning) 12%, transparent);
+  color: var(--color-warning);
+}
+
+.sa-stat-card--danger .sa-stat-card__icon {
+  background-color: color-mix(in srgb, var(--color-danger) 12%, transparent);
+  color: var(--color-danger);
+}
+
+.sa-stat-card--info .sa-stat-card__icon {
+  background-color: color-mix(in srgb, #3B82F6 12%, transparent);
+  color: #3B82F6;
+}
+
+.sa-stat-card__content {
+  display: flex;
+  flex-direction: column;
+}
+
+.sa-stat-card__value {
+  font-size: var(--font-size-xl);
+  font-weight: var(--font-weight-bold);
+  color: var(--color-text);
+  line-height: 1.2;
+}
+
+.sa-stat-card__label {
+  font-size: var(--font-size-sm);
+  color: var(--color-text-muted);
+  margin-top: 2px;
+}

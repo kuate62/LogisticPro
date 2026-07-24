@@ -1,0 +1,177 @@
+.sa-company-edit {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-lg, 24px);
+  padding: var(--spacing-lg, 24px);
+  max-width: 900px;
+  margin: 0 auto;
+}
+
+.sa-company-edit__back {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--spacing-sm, 8px);
+  background: none;
+  border: none;
+  color: var(--color-text-muted, #6b7280);
+  font-size: var(--font-size-sm, 14px);
+  font-family: var(--font-family);
+  cursor: pointer;
+  padding: 0;
+  width: fit-content;
+}
+
+.sa-company-edit__back:hover {
+  color: var(--color-primary, #2563eb);
+}
+
+.sa-company-edit__title {
+  font-size: var(--font-size-xl, 20px);
+  font-weight: var(--font-weight-bold, 700);
+  color: var(--color-text-primary, #111827);
+  margin: 0;
+}
+
+.sa-company-edit__title span {
+  color: var(--color-primary, #2563eb);
+}
+
+.sa-company-edit__form {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-lg, 24px);
+}
+
+.sa-company-edit__card {
+  background-color: var(--color-card, #fff);
+  border: 1px solid var(--color-border, #e5e7eb);
+  border-radius: var(--radius-lg, 12px);
+  padding: var(--spacing-lg, 24px);
+}
+
+.sa-company-edit__card-title {
+  font-size: var(--font-size-lg, 18px);
+  font-weight: var(--font-weight-semibold, 600);
+  color: var(--color-text-primary, #111827);
+  margin: 0 0 var(--spacing-lg, 24px) 0;
+}
+
+.sa-company-edit__grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--spacing-md, 16px);
+}
+
+.sa-company-edit__field {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.sa-company-edit__field--full {
+  grid-column: 1 / -1;
+}
+
+.sa-company-edit__field label {
+  font-size: var(--font-size-sm, 14px);
+  font-weight: var(--font-weight-medium, 500);
+  color: var(--color-text-primary, #111827);
+}
+
+.sa-company-edit__field input,
+.sa-company-edit__field select,
+.sa-company-edit__field textarea {
+  padding: var(--spacing-sm, 8px) var(--spacing-md, 12px);
+  border: 1px solid var(--color-border, #e5e7eb);
+  border-radius: var(--radius-md, 8px);
+  font-size: var(--font-size-sm, 14px);
+  font-family: var(--font-family);
+  color: var(--color-text-primary, #111827);
+  background-color: var(--color-card, #fff);
+  outline: none;
+  transition: border-color 0.2s ease;
+}
+
+.sa-company-edit__field input:focus,
+.sa-company-edit__field select:focus,
+.sa-company-edit__field textarea:focus {
+  border-color: var(--color-primary, #2563eb);
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--color-primary, #2563eb) 12%, transparent);
+}
+
+.sa-company-edit__field input:disabled {
+  background-color: var(--color-bg, #f9fafb);
+  color: var(--color-text-muted, #6b7280);
+}
+
+.sa-company-edit__field textarea {
+  resize: vertical;
+  min-height: 80px;
+}
+
+.sa-company-edit__actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: var(--spacing-sm, 8px);
+}
+
+.sa-company-edit__btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: var(--spacing-sm, 8px) var(--spacing-lg, 24px);
+  border-radius: var(--radius-md, 8px);
+  font-size: var(--font-size-sm, 14px);
+  font-weight: var(--font-weight-medium, 500);
+  font-family: var(--font-family);
+  cursor: pointer;
+  border: 1px solid transparent;
+  transition: all 0.2s ease;
+}
+
+.sa-company-edit__btn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.sa-company-edit__btn--cancel {
+  background-color: var(--color-card, #fff);
+  color: var(--color-text-primary, #111827);
+  border-color: var(--color-border, #e5e7eb);
+}
+
+.sa-company-edit__btn--cancel:hover {
+  background-color: var(--color-bg, #f9fafb);
+}
+
+.sa-company-edit__btn--save {
+  background-color: var(--color-primary, #2563eb);
+  color: var(--color-text-inverse, #fff);
+}
+
+.sa-company-edit__btn--save:hover:not(:disabled) {
+  opacity: 0.9;
+}
+
+.sa-company-edit__error {
+  padding: var(--spacing-lg, 24px);
+  text-align: center;
+  color: var(--color-danger, #dc2626);
+  font-size: var(--font-size-sm, 14px);
+}
+
+@media (max-width: 768px) {
+  .sa-company-edit__grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 640px) {
+  .sa-company-edit {
+    padding: var(--spacing-md, 16px);
+  }
+
+  .sa-company-edit__actions {
+    flex-direction: column;
+  }
+}

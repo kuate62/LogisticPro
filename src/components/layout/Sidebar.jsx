@@ -1,18 +1,89 @@
 import { useState } from 'react';
-import { NavLink, useNavigate } from 'react-router-dom';
+import { NavLink, useNavigate, useLocation } from 'react-router-dom';
 import { useAuth } from '../../hooks/useAuth';
 import { NAV_ITEMS, SUPER_ADMIN_NAV, NAV_FOOTER, SIDEBAR_WIDTH_EXPANDED, SIDEBAR_WIDTH_COLLAPSED } from '../../config/navigation';
-import { ChevronLeft, ChevronRight } from 'lucide-react';
+import { ChevronLeft, ChevronRight, ChevronDown } from 'lucide-react';
 import { AuthLogo } from '../auth';
 import './Sidebar.css';
+
+function isChildActive(children, pathname) {
+  return children.some((child) => child.path && pathname.startsWith(child.path));
+}
+
+function SidebarItem({ item, collapsed, pathname }) {
+  const hasChildren = item.children && item.children.length > 0;
+  const [expanded, setExpanded] = useState(
+    hasChildren && isChildActive(item.children, pathname)
+  );
+
+  if (!hasChildren) {
+    return (
+      <li>
+        <NavLink
+          to={item.path}
+          className={({ isActive }) =>
+            `lp-sidebar__link ${isActive ? 'lp-sidebar__link--active' : ''}`
+          }
+          title={collapsed ? item.label : undefined}
+          end={item.key === 'admin_dashboard' || item.key === 'dashboard'}
+        >
+          <item.icon size={20} className="lp-sidebar__icon" />
+          {!collapsed && <span className="lp-sidebar__label">{item.label}</span>}
+        </NavLink>
+      </li>
+    );
+  }
+
+  const anyChildActive = isChildActive(item.children, pathname);
+
+  return (
+    <li className={`lp-sidebar__group ${expanded ? 'lp-sidebar__group--expanded' : ''}`}>
+      <button
+        className={`lp-sidebar__link lp-sidebar__link--group ${anyChildActive ? 'lp-sidebar__link--active-parent' : ''}`}
+        onClick={() => setExpanded(!expanded)}
+        title={collapsed ? item.label : undefined}
+        type="button"
+      >
+        <item.icon size={20} className="lp-sidebar__icon" />
+        {!collapsed && (
+          <>
+            <span className="lp-sidebar__label">{item.label}</span>
+            <ChevronDown
+              size={14}
+              className={`lp-sidebar__chevron ${expanded ? 'lp-sidebar__chevron--open' : ''}`}
+            />
+          </>
+        )}
+      </button>
+      {!collapsed && expanded && (
+        <ul className="lp-sidebar__sublist">
+          {item.children.map((child) => (
+            <li key={child.key}>
+              <NavLink
+                to={child.path}
+                className={({ isActive }) =>
+                  `lp-sidebar__link lp-sidebar__link--sub ${isActive ? 'lp-sidebar__link--active' : ''}`
+                }
+              >
+                <child.icon size={16} className="lp-sidebar__icon" />
+                <span className="lp-sidebar__label">{child.label}</span>
+              </NavLink>
+            </li>
+          ))}
+        </ul>
+      )}
+    </li>
+  );
+}
 
 export function Sidebar() {
   const [collapsed, setCollapsed] = useState(false);
   const { user, logout } = useAuth();
   const navigate = useNavigate();
+  const { pathname } = useLocation();
 
   const isSuperAdmin = user?.role === 'super_admin';
-  const navItems = isSuperAdmin ? [...SUPER_ADMIN_NAV, ...NAV_ITEMS] : NAV_ITEMS;
+  const navItems = isSuperAdmin ? SUPER_ADMIN_NAV : NAV_ITEMS;
 
   const handleLogout = async () => {
     await logout();
@@ -50,19 +121,7 @@ export function Sidebar() {
       <nav className="lp-sidebar__nav" role="navigation" aria-label="Navigation principale">
         <ul className="lp-sidebar__list">
           {navItems.map((item) => (
-            <li key={item.key}>
-              <NavLink
-                to={item.path}
-                className={({ isActive }) =>
-                  `lp-sidebar__link ${isActive ? 'lp-sidebar__link--active' : ''}`
-                }
-                title={collapsed ? item.label : undefined}
-                end={item.key === 'dashboard'}
-              >
-                <item.icon size={20} className="lp-sidebar__icon" />
-                {!collapsed && <span className="lp-sidebar__label">{item.label}</span>}
-              </NavLink>
-            </li>
+            <SidebarItem key={item.key} item={item} collapsed={collapsed} pathname={pathname} />
           ))}
         </ul>
       </nav>

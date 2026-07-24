@@ -2,7 +2,8 @@ import {
   Package, Truck, Users, Building2, BarChart3,
   Settings, CreditCard, Route, LogOut,
   LayoutDashboard, Search, Tags, Repeat,
-  Globe, UserCog, DollarSign,
+  UserCog, DollarSign,
+  Crown, Briefcase, Bell, User, Shield,
 } from 'lucide-react';
 
 export const NAV_ITEMS = [
@@ -24,7 +25,18 @@ export const NAV_ITEMS = [
 ];
 
 export const SUPER_ADMIN_NAV = [
-  { key: 'companies', label: 'Entreprises', icon: Globe, path: '/companies' },
+  { key: 'admin_dashboard', label: 'Dashboard', icon: LayoutDashboard, path: '/admin' },
+  { key: 'admin_commercial', label: 'Gestion commerciale', icon: DollarSign, children: [
+    { key: 'admin_plans', label: "Plans d'abonnement", icon: Crown, path: '/admin/plans' },
+    { key: 'admin_subscriptions', label: 'Abonnements', icon: Repeat, path: '/admin/subscriptions' },
+  ]},
+  { key: 'admin_companies', label: 'Gestion des entreprises', icon: Building2, path: '/admin/companies' },
+  { key: 'admin_users', label: 'Utilisateurs plateforme', icon: Users, children: [
+    { key: 'admin_superadmins', label: 'Super Admins', icon: Shield, path: '/admin/super-admins' },
+    { key: 'admin_managers', label: "Responsables d'entreprise", icon: Briefcase, path: '/admin/managers' },
+  ]},
+  { key: 'admin_notifications', label: 'Notifications', icon: Bell, path: '/admin/notifications' },
+  { key: 'admin_profile', label: 'Profil', icon: User, path: '/admin/profile' },
 ];
 
 export const NAV_FOOTER = [

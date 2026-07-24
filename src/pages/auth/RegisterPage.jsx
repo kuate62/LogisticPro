@@ -91,7 +91,7 @@ export function RegisterPage() {
 
         <FormField label="Téléphone" error={errors.phone} helperText="Optionnel">
           <TextInput
-            placeholder="+243 81 234 5678"
+            placeholder="+237 691 234 567"
             type="tel"
             autoComplete="tel"
             {...getFieldProps('phone')}

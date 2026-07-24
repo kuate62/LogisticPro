@@ -3,9 +3,9 @@ import { AGENCY_STATUS_LABELS, AGENCY_STATUS_COLORS } from '../config/constants'
 export function formatAgencyPhone(phone) {
   if (!phone) return '';
   const cleaned = phone.replace(/\s/g, '');
-  if (cleaned.startsWith('+243')) {
+  if (cleaned.startsWith('+237')) {
     const num = cleaned.slice(4);
-    return `+243 ${num.slice(0, 2)} ${num.slice(2, 5)} ${num.slice(5)}`;
+    return `+237 ${num.slice(0, 3)} ${num.slice(3, 6)} ${num.slice(6)}`;
   }
   return phone;
 }
@@ -34,10 +34,10 @@ export function formatAgencyDate(dateStr) {
 
 export function formatAgencyCurrency(val) {
   if (val === undefined || val === null) return '—';
-  return new Intl.NumberFormat('fr-CD', {
+  return new Intl.NumberFormat('fr-CM', {
     style: 'decimal',
     maximumFractionDigits: 0,
-  }).format(val) + ' FC';
+  }).format(val) + ' FCFA';
 }
 
 export function formatAgencySchedule(schedule) {

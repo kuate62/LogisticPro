@@ -1,0 +1,95 @@
+.sa-super-admins {
+  padding: var(--spacing-lg);
+  max-width: var(--content-max-width);
+  margin: 0 auto;
+}
+
+.sa-super-admins__table-wrap {
+  background: var(--color-card);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-sm);
+  border: 1px solid var(--color-border);
+  overflow-x: auto;
+}
+
+.sa-super-admins__table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.sa-super-admins__table thead {
+  background: var(--color-bg);
+}
+
+.sa-super-admins__table th {
+  padding: var(--spacing-3) var(--spacing-4);
+  text-align: left;
+  font-size: var(--font-size-xs);
+  font-weight: var(--font-weight-semibold);
+  color: var(--color-text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  white-space: nowrap;
+  border-bottom: 1px solid var(--color-border);
+}
+
+.sa-super-admins__table td {
+  padding: var(--spacing-3) var(--spacing-4);
+  font-size: var(--font-size-sm);
+  color: var(--color-text);
+  border-bottom: 1px solid var(--color-border);
+  vertical-align: middle;
+}
+
+.sa-super-admins__table tbody tr:last-child td {
+  border-bottom: none;
+}
+
+.sa-super-admins__table tbody tr:hover {
+  background-color: var(--color-bg);
+}
+
+.sa-super-admins__user {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-3);
+}
+
+.sa-super-admins__avatar {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 36px;
+  border-radius: var(--radius-full);
+  background-color: var(--color-primary-light);
+  color: var(--color-primary);
+  font-size: var(--font-size-xs);
+  font-weight: var(--font-weight-semibold);
+  flex-shrink: 0;
+}
+
+.sa-super-admins__name {
+  font-weight: var(--font-weight-medium);
+  white-space: nowrap;
+}
+
+.sa-super-admins__email {
+  color: var(--color-text-secondary);
+}
+
+.sa-super-admins__date {
+  color: var(--color-text-secondary);
+  white-space: nowrap;
+}
+
+@media (max-width: 768px) {
+  .sa-super-admins {
+    padding: var(--spacing-md);
+  }
+
+  .sa-super-admins__table th:nth-child(3),
+  .sa-super-admins__table td:nth-child(3) {
+    display: none;
+  }
+}

@@ -11,7 +11,9 @@ import routeModuleRouter from './routeModuleRouter';
 import pricingRouter from './pricingRouter';
 import trackingRouter from './trackingRouter';
 import paymentRouter from './paymentRouter';
-import placeholderRouter from './placeholderRouter';
+import packagesRouter from './packagesRouter';
+import subscriptionRouter from './subscriptionRouter';
+import adminRouter from './adminRouter';
 
 const appRouter = [
   {
@@ -21,6 +23,7 @@ const appRouter = [
       </ProtectedRoute>
     ),
     children: [
+      ...adminRouter,
       ...dashboardRouter,
       ...agencyRouter,
       ...employeeRouter,
@@ -31,7 +34,8 @@ const appRouter = [
       ...pricingRouter,
       ...trackingRouter,
       ...paymentRouter,
-      ...placeholderRouter,
+      ...packagesRouter,
+      ...subscriptionRouter,
     ],
   },
   { path: '*', element: <Navigate to="/login" replace /> },

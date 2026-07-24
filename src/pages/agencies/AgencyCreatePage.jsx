@@ -128,12 +128,12 @@ export function AgencyCreatePage() {
             </div>
             <div className="lp-form-grid__field">
               <label className="lp-form-label">Téléphone <span className="lp-form-required">*</span></label>
-              <input className={`lp-form-input ${errors.phone ? 'lp-form-input--error' : ''}`} value={values.phone} onChange={(e) => setValue('phone', e.target.value)} placeholder="+243 81 234 5678" />
+              <input className={`lp-form-input ${errors.phone ? 'lp-form-input--error' : ''}`} value={values.phone} onChange={(e) => setValue('phone', e.target.value)} placeholder="+237 691 234 567" />
               {errors.phone && <span className="lp-form-error">{errors.phone}</span>}
             </div>
             <div className="lp-form-grid__field">
               <label className="lp-form-label">Email <span className="lp-form-required">*</span></label>
-              <input className={`lp-form-input ${errors.email ? 'lp-form-input--error' : ''}`} type="email" value={values.email} onChange={(e) => setValue('email', e.target.value)} placeholder="agence@transport.cd" />
+              <input className={`lp-form-input ${errors.email ? 'lp-form-input--error' : ''}`} type="email" value={values.email} onChange={(e) => setValue('email', e.target.value)} placeholder="agence@transport.cm" />
               {errors.email && <span className="lp-form-error">{errors.email}</span>}
             </div>
             <div className="lp-form-grid__field lp-form-grid__field--full">
@@ -204,12 +204,12 @@ export function AgencyCreatePage() {
             </div>
             <div className="lp-form-grid__field">
               <label className="lp-form-label">Email <span className="lp-form-required">*</span></label>
-              <input className={`lp-form-input ${errors.managerEmail ? 'lp-form-input--error' : ''}`} type="email" value={values.managerEmail} onChange={(e) => setValue('managerEmail', e.target.value)} placeholder="responsable@transport.cd" />
+              <input className={`lp-form-input ${errors.managerEmail ? 'lp-form-input--error' : ''}`} type="email" value={values.managerEmail} onChange={(e) => setValue('managerEmail', e.target.value)} placeholder="responsable@transport.cm" />
               {errors.managerEmail && <span className="lp-form-error">{errors.managerEmail}</span>}
             </div>
             <div className="lp-form-grid__field">
               <label className="lp-form-label">Téléphone <span className="lp-form-required">*</span></label>
-              <input className={`lp-form-input ${errors.managerPhone ? 'lp-form-input--error' : ''}`} value={values.managerPhone} onChange={(e) => setValue('managerPhone', e.target.value)} placeholder="+243 83 456 7890" />
+              <input className={`lp-form-input ${errors.managerPhone ? 'lp-form-input--error' : ''}`} value={values.managerPhone} onChange={(e) => setValue('managerPhone', e.target.value)} placeholder="+237 693 456 789" />
               {errors.managerPhone && <span className="lp-form-error">{errors.managerPhone}</span>}
             </div>
           </div>
