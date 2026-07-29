@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { useParams } from 'react-router-dom';
 import { Container, Row, Col } from 'react-bootstrap';
 import { Search, MapPin, Phone, Clock, Navigation } from 'lucide-react';
 import PublicBreadcrumb from '../../components/public/PublicBreadcrumb';
@@ -17,6 +18,7 @@ const AGENCIES = [
 const CITIES = ['Toutes', 'Douala', 'Yaoundé', 'Bamenda', 'Garoua', 'Maroua', 'Kribi'];
 
 export default function AgenciesPage() {
+  const { idEntreprise } = useParams();
   const [search, setSearch] = useState('');
   const [activeCity, setActiveCity] = useState('Toutes');
 
@@ -127,9 +129,9 @@ export default function AgenciesPage() {
         title="Besoin d'une agence ?"
         subtitle="Notre réseau couvre l'ensemble du territoire camerounais"
         primaryLabel="Nous contacter"
-        primaryTo="/contact"
+        primaryTo={`/entreprises/${idEntreprise}/contact`}
         secondaryLabel="Comment envoyer"
-        secondaryTo="/comment-envoyer"
+        secondaryTo={`/entreprises/${idEntreprise}/comment-envoyer`}
       />
     </>
   );

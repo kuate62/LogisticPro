@@ -1,3 +1,4 @@
+import { useParams } from 'react-router-dom';
 import { Container, Row, Col } from 'react-bootstrap';
 import { Phone, Mail, MapPin, Clock } from 'lucide-react';
 import PublicBreadcrumb from '../../components/public/PublicBreadcrumb';
@@ -13,6 +14,7 @@ const INFOS = [
 ];
 
 export default function ContactPage() {
+  const { idEntreprise } = useParams();
   return (
     <>
       <section className="lp-page-hero">
@@ -75,9 +77,9 @@ export default function ContactPage() {
         title="Besoin d'aide immédiate ?"
         subtitle="Appelez-nous directement ou visitez l'agence la plus proche"
         primaryLabel="Trouver une agence"
-        primaryTo="/agences"
+        primaryTo={`/entreprises/${idEntreprise}/agences`}
         secondaryLabel="Suivre un colis"
-        secondaryTo="/track"
+        secondaryTo={`/entreprises/${idEntreprise}/suivi`}
       />
     </>
   );

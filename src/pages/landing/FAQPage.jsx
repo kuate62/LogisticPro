@@ -1,4 +1,5 @@
 import { useState, useMemo } from 'react';
+import { useParams } from 'react-router-dom';
 import { Container } from 'react-bootstrap';
 import { Search, HelpCircle, Phone } from 'lucide-react';
 import PublicBreadcrumb from '../../components/public/PublicBreadcrumb';
@@ -44,6 +45,7 @@ const POPULAR = [
 ];
 
 export default function FAQPage() {
+  const { idEntreprise } = useParams();
   const [search, setSearch] = useState('');
   const [activeCategory, setActiveCategory] = useState('all');
 
@@ -132,9 +134,9 @@ export default function FAQPage() {
         title="Une autre question ?"
         subtitle="Notre équipe est disponible pour vous aider"
         primaryLabel="Nous contacter"
-        primaryTo="/contact"
+        primaryTo={`/entreprises/${idEntreprise}/contact`}
         secondaryLabel="Trouver une agence"
-        secondaryTo="/agences"
+        secondaryTo={`/entreprises/${idEntreprise}/agences`}
       />
     </>
   );

@@ -42,7 +42,7 @@
 .lp-hero {
   position: relative;
   padding: 120px 0 80px;
-  background: url('https://images.unsplash.com/photo-1601584115197-04ecc0da31d7?w=1920&q=80') center/cover no-repeat;
+  background: url('./../../assets/hero-landing.jpg') center/cover no-repeat;
   overflow: hidden;
 }
 
@@ -50,7 +50,6 @@
   content: '';
   position: absolute;
   inset: 0;
-  background: linear-gradient(135deg, rgba(15, 23, 42, 0.88) 0%, rgba(37, 99, 235, 0.65) 100%);
   z-index: 1;
 }
 

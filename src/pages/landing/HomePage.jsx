@@ -1,23 +1,24 @@
 import { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import { Row, Col, Container } from 'react-bootstrap';
 import {
-  Search, Package, MapPin, CreditCard, BarChart3,
-  Truck, Clock, Bell, Shield, Zap, Globe,
-  ArrowRight, Eye, Hash, Users,
+  Search, Package, MapPin, CreditCard,
+  Truck, Clock, Bell, Shield, Zap,
+  ArrowRight, Users, Weight, Store, Ship,
 } from 'lucide-react';
 import SectionHeader from '../../components/public/SectionHeader';
 import CTABanner from '../../components/public/CTABanner';
 import './HomePage.css';
 
 function HeroSection() {
+  const { idEntreprise } = useParams();
   const [trackingNumber, setTrackingNumber] = useState('');
   const navigate = useNavigate();
 
   const handleTrack = (e) => {
     e.preventDefault();
     if (trackingNumber.trim()) {
-      navigate(`/track?number=${encodeURIComponent(trackingNumber.trim())}`);
+      navigate(`/entreprises/${idEntreprise}/suivi?number=${encodeURIComponent(trackingNumber.trim())}`);
     }
   };
 
@@ -27,14 +28,14 @@ function HeroSection() {
         <Row className="align-items-center">
           <Col lg={6}>
             <div className="lp-hero__content">
-              <span className="lp-hero__badge">Plateforme #1 de logistique au Cameroun</span>
+              <span className="lp-hero__badge">Leader du transport de colis au Cameroun</span>
               <h1 className="lp-hero__title">
-                La plateforme de logistique de nouvelle génération{' '}
-                <span className="lp-hero__highlight">au Cameroun</span>
+                Votre colis livré partout au Cameroun{' '}
+                <span className="lp-hero__highlight">en toute confiance</span>
               </h1>
               <p className="lp-hero__subtitle">
-                Suivez vos colis en temps réel, gérez vos agences et optimisez vos opérations
-                transport avec une solution tout-en-un.
+                Envoyez et recevez vos colis dans tout le Cameroun. Bénéficiez d'un suivi en temps réel,
+                de paiements sécurisés et d'un réseau de 26 agences à travers le pays.
               </p>
               <form className="lp-hero__search" onSubmit={handleTrack}>
                 <Search size={20} className="lp-hero__search-icon" />
@@ -49,11 +50,11 @@ function HeroSection() {
               <div className="lp-hero__trust">
                 <div className="lp-hero__avatars">
                   {[
-                    { color: '#2563EB', initials: 'PK' },
-                    { color: '#7C3AED', initials: 'SN' },
-                    { color: '#059669', initials: 'JK' },
-                    { color: '#D97706', initials: 'ML' },
-                    { color: '#DC2626', initials: 'TO' },
+                    { color: '#2563EB', initials: 'JD' },
+                    { color: '#7C3AED', initials: 'AM' },
+                    { color: '#059669', initials: 'NF' },
+                    { color: '#D97706', initials: 'CK' },
+                    { color: '#DC2626', initials: 'IO' },
                   ].map((a, i) => (
                     <div
                       key={i}
@@ -65,7 +66,7 @@ function HeroSection() {
                   ))}
                 </div>
                 <p className="lp-hero__trust-text">
-                  <strong>+50 entreprises</strong> nous font confiance
+                  <strong>+3 850 clients</strong> nous font confiance
                 </p>
               </div>
             </div>
@@ -75,7 +76,7 @@ function HeroSection() {
               <div className="lp-hero__visual-card lp-hero__visual-card--main">
                 <div className="lp-hero__tracking-header">
                   <Truck size={20} style={{ color: 'var(--color-primary)' }} />
-                  <span>Expédition #EXP-2026</span>
+                  <span>Colis #EXP-2026</span>
                   <span className="lp-hero__tracking-badge">En transit</span>
                 </div>
                 <div className="lp-hero__tracking-route">
@@ -126,7 +127,7 @@ function HeroSection() {
                   <Bell size={18} />
                 </div>
                 <div className="lp-hero__float-text">
-                  <strong>3 nouvelles notifications</strong>
+                  <strong>2 nouvelles notifications</strong>
                   <small>Mise à jour il y a 2 min</small>
                 </div>
               </div>
@@ -140,10 +141,10 @@ function HeroSection() {
 
 function StatsSection() {
   const stats = [
-    { icon: Package, value: '+12 500', label: 'Colis livrés' },
+    { icon: Package, value: '+42 800', label: 'Colis livrés' },
     { icon: MapPin, value: '26', label: 'Agences' },
-    { icon: Globe, value: '45+', label: 'Villes desservies' },
-    { icon: Users, value: '+50', label: 'Clients satisfaits' },
+    { icon: Truck, value: '45+', label: 'Villes desservies' },
+    { icon: Users, value: '+3 850', label: 'Clients satisfaits' },
   ];
 
   return (
@@ -168,27 +169,28 @@ function StatsSection() {
 }
 
 function ServicesPreviewSection() {
+  const { idEntreprise } = useParams();
   const navigate = useNavigate();
   const services = [
     {
       icon: Truck,
-      title: 'Suivi en temps réel',
-      desc: 'Suivez chaque colis de l\'expédition à la livraison avec des notifications en temps réel.',
+      title: 'Livraison express',
+      desc: 'Livraison en quelques heures dans la même ville et en J+1 en interurbain.',
     },
     {
-      icon: MapPin,
-      title: 'Gestion des agences',
-      desc: 'Gérez vos agences à travers tout le Cameroun avec des tableaux de bord dédiés.',
+      icon: Package,
+      title: 'Envoi de colis',
+      desc: 'Envoyez colis standard et volumineux vers toutes les villes du Cameroun.',
     },
     {
       icon: CreditCard,
-      title: 'Paiements mobiles',
-      desc: 'Orange Money, MTN Mobile Money, espèces — tous les modes de paiement intégrés.',
+      title: 'Paiement à la livraison',
+      desc: 'Payez à la réception en espèces, Orange Money ou MTN Mobile Money.',
     },
     {
-      icon: BarChart3,
-      title: 'Rapports & analytics',
-      desc: 'Tableaux de bord et rapports détaillés pour optimiser vos performances.',
+      icon: Weight,
+      title: 'Transport marchandises',
+      desc: 'Transport de palettes et marchandises volumineuses avec des véhicules adaptés.',
     },
   ];
 
@@ -197,7 +199,7 @@ function ServicesPreviewSection() {
       <Container>
         <SectionHeader
           tag="Services"
-          title="Des solutions complètes pour votre logistique"
+          title="Des solutions adaptées à vos besoins"
         />
         <Row className="g-4">
           {services.map((s) => (
@@ -211,7 +213,7 @@ function ServicesPreviewSection() {
                 <button
                   type="button"
                   className="lp-service-card__link"
-                  onClick={() => navigate('/services')}
+                  onClick={() => navigate(`/entreprises/${idEntreprise}/services`)}
                 >
                   En savoir plus <ArrowRight size={14} />
                 </button>
@@ -228,21 +230,27 @@ function HowItWorksPreviewSection() {
   const steps = [
     {
       number: '01',
-      icon: Package,
-      title: 'Déposez votre colis',
-      desc: 'Déposez votre colis dans l\'une de nos agences',
+      icon: Store,
+      title: 'Passez en agence',
+      desc: 'Déposez votre colis dans l\'une de nos 26 agences partenaires',
     },
     {
       number: '02',
-      icon: Hash,
+      icon: Package,
       title: 'Recevez votre numéro',
-      desc: 'Recevez votre numéro de suivi unique',
+      desc: 'Recevez votre numéro de suivi unique par SMS',
     },
     {
       number: '03',
-      icon: Eye,
+      icon: Truck,
       title: 'Suivez en temps réel',
-      desc: 'Suivez en temps réel et récupérez votre colis',
+      desc: 'Suivez votre colis à chaque étape de son parcours',
+    },
+    {
+      number: '04',
+      icon: MapPin,
+      title: 'Récupérez votre colis',
+      desc: 'Réceptionnez votre colis à l\'agence de destination',
     },
   ];
 
@@ -251,7 +259,7 @@ function HowItWorksPreviewSection() {
       <Container>
         <SectionHeader
           tag="Processus"
-          title="Comment ça marche"
+          title="Comment envoyer un colis"
         />
         <div className="lp-how__timeline">
           {steps.map((step) => (
@@ -272,12 +280,12 @@ function HowItWorksPreviewSection() {
 
 function WhyUsSection() {
   const advantages = [
-    { icon: Clock, title: 'Temps réel', desc: 'Suivi instantané de chaque expédition' },
-    { icon: Bell, title: 'Notifications', desc: 'Alertes par SMS et notification push' },
-    { icon: MapPin, title: 'Couverture nationale', desc: 'Agences dans les 10 régions' },
-    { icon: Shield, title: 'Paiements sécurisés', desc: 'Transactions chiffrées et fiables' },
-    { icon: BarChart3, title: 'Historique complet', desc: 'Toutes vos données accessibles' },
-    { icon: Zap, title: 'Ultra-rapide', desc: 'Interface réactive et fluide' },
+    { icon: Clock, title: 'Livraison rapide', desc: 'Express intra-ville en 2-4h, interurbain en 24-48h' },
+    { icon: Bell, title: 'Notifications SMS', desc: 'Alertes à chaque étape de votre envoi' },
+    { icon: MapPin, title: 'Réseau national', desc: '26 agences couvrant les 10 régions du Cameroun' },
+    { icon: Shield, title: 'Colis assurés', desc: 'Tous vos envois sont couverts par notre assurance' },
+    { icon: Ship, title: 'Fret disponible', desc: 'Fret maritime et aérien vers l\'international' },
+    { icon: Zap, title: 'Paiement flexible', desc: 'Espèces, Orange Money, MTN MoMo ou à la livraison' },
   ];
 
   return (
@@ -285,8 +293,8 @@ function WhyUsSection() {
       <Container>
         <SectionHeader
           tag="Avantages"
-          title="Pourquoi LogisticPro ?"
-          subtitle="Des fonctionnalités pensées pour simplifier votre quotidien logistique"
+          title="Pourquoi nous choisir ?"
+          subtitle="Un service fiable et un réseau qui couvre tout le Cameroun"
         />
         <Row className="g-4">
           {advantages.map((a) => (
@@ -307,6 +315,7 @@ function WhyUsSection() {
 }
 
 export default function HomePage() {
+  const { idEntreprise } = useParams();
   return (
     <>
       <HeroSection />
@@ -315,13 +324,13 @@ export default function HomePage() {
       <HowItWorksPreviewSection />
       <WhyUsSection />
       <CTABanner
-        title="Prêt à optimiser vos expéditions ?"
-        subtitle="Rejoignez les entreprises qui font confiance à LogisticPro"
+        title="Prêt à envoyer un colis ?"
+        subtitle="Suivez votre colis ou contactez-nous pour un accompagnement personnalisé"
         primaryLabel="Suivre mon colis"
-        primaryTo="/track"
-        secondaryLabel="Créer un compte"
-        secondaryTo="/register"
-        note="Essai gratuit de 14 jours. Aucune carte de crédit requise."
+        primaryTo={`/entreprises/${idEntreprise}/suivi`}
+        secondaryLabel="Nous contacter"
+        secondaryTo={`/entreprises/${idEntreprise}/contact`}
+        note="Plus de 26 agences à votre service dans tout le Cameroun."
       />
     </>
   );

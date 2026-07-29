@@ -2,6 +2,7 @@ import PublicLayout from '../layouts/PublicLayout';
 import HomePage from '../pages/landing/HomePage';
 import TrackPage from '../pages/tracking/TrackPage';
 import ServicesPage from '../pages/landing/ServicesPage';
+import TarifPage from '../pages/landing/TarifPage';
 import AgenciesPage from '../pages/landing/AgenciesPage';
 import HowToSendPage from '../pages/landing/HowToSendPage';
 import FAQPage from '../pages/landing/FAQPage';
@@ -14,6 +15,7 @@ const publicRouter = [
       { index: true, element: <HomePage /> },
       { path: 'track', element: <TrackPage /> },
       { path: 'services', element: <ServicesPage /> },
+      { path: 'tarif', element: <TarifPage /> },
       { path: 'agences', element: <AgenciesPage /> },
       { path: 'comment-envoyer', element: <HowToSendPage /> },
       { path: 'faq', element: <FAQPage /> },

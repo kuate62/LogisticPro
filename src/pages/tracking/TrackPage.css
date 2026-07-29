@@ -4,9 +4,12 @@
 }
 
 .tks-hero {
-  background: linear-gradient(135deg, #0F172A 0%, #1E293B 100%);
+  background:
+    linear-gradient(135deg, rgba(15, 23, 42, 0.85) 0%, rgba(29, 78, 216, 0.7) 100%),
+    url('./../../assets/hero-tracking.jpg') center/cover no-repeat;
   padding: 64px 0 48px;
   text-align: center;
+  position: relative;
 }
 
 .tks-hero__content {

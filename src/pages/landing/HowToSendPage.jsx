@@ -1,3 +1,4 @@
+import { useParams } from 'react-router-dom';
 import { Container, Row, Col } from 'react-bootstrap';
 import {
   Package, CreditCard, Truck, Navigation, MapPin, PackageCheck,
@@ -33,6 +34,7 @@ const PROHIBITED = [
 ];
 
 export default function HowToSendPage() {
+  const { idEntreprise } = useParams();
   return (
     <>
       <section className="lp-page-hero">
@@ -114,9 +116,9 @@ export default function HowToSendPage() {
         title="Envoyez votre premier colis"
         subtitle="Rejoignez les milliers de clients qui nous font confiance"
         primaryLabel="Trouver une agence"
-        primaryTo="/agences"
+        primaryTo={`/entreprises/${idEntreprise}/agences`}
         secondaryLabel="Suivre un colis"
-        secondaryTo="/track"
+        secondaryTo={`/entreprises/${idEntreprise}/suivi`}
       />
     </>
   );

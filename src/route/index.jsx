@@ -1,9 +1,9 @@
 import appRouter from "./appRouter";
 import authRouter from "./authRouter";
-import publicRouter from "./publicRouter";
+import entrepriseRouter from "./entrepriseRouter";
 
 const index = [
-  ...publicRouter,
+  ...entrepriseRouter,
   ...appRouter,
   ...authRouter,
 ];
