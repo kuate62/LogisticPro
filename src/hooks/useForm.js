@@ -1,7 +1,7 @@
 import { useState, useCallback } from 'react';
 
-export function useForm({ schema, onSubmit }) {
-  const [values, setValues] = useState({});
+export function useForm({ schema, onSubmit, initialValues = {} }) {
+  const [values, setValues] = useState(initialValues);
   const [errors, setErrors] = useState({});
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [submitError, setSubmitError] = useState(null);
@@ -61,16 +61,16 @@ export function useForm({ schema, onSubmit }) {
   }, [validate, onSubmit, values]);
 
   const reset = useCallback(() => {
-    setValues({});
+    setValues(initialValues);
     setErrors({});
     setSubmitError(null);
     setSubmitSuccess(null);
     setIsSubmitting(false);
-  }, []);
+  }, [initialValues]);
 
   const getFieldProps = useCallback((name) => ({
     name,
-    value: values[name] || '',
+    value: values[name] ?? '',
     onChange: (e) => setValue(name, e.target.value),
     error: errors[name],
   }), [values, errors, setValue]);

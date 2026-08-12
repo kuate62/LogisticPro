@@ -5,15 +5,18 @@ import { AuthCard, AuthHeader, AuthFooter } from '../../components/auth';
 import { FormField, EmailInput, PasswordInput, LoadingButton, FormError } from '../../components/form';
 import { useForm } from '../../hooks/useForm';
 import { useAuth } from '../../hooks/useAuth';
+import useAuthStore from '../../store/useAuthStore';
+import { getHomePath } from '../../utils/homePath';
 import { loginSchema } from '../../helpers/validation';
 import './LoginPage.css';
 
 export function LoginPage() {
   const navigate = useNavigate();
-  const { login, clearError } = useAuth();
+  const { login } = useAuth();
   const emailRef = useRef(null);
 
   const {
+    values,
     errors,
     submitError,
     isSubmitting,
@@ -22,8 +25,13 @@ export function LoginPage() {
     setValue,
   } = useForm({
     schema: loginSchema,
+    initialValues: {
+      email: '',
+      password: '',
+      remember: false,
+    },
     onSubmit: async (values) => {
-      await login({ email: values.email, password: values.password });
+      return await login({ email: values.email, password: values.password });
     },
   });
 
@@ -31,17 +39,16 @@ export function LoginPage() {
     emailRef.current?.focus();
   }, []);
 
-  useEffect(() => {
-    clearError();
-  }, [clearError]);
-
   const onSubmit = async (e) => {
     try {
-      await handleSubmit(e);
-      toast.success('Connexion réussie ! Bienvenue.');
-      navigate('/dashboard');
+      const result = await handleSubmit(e);
+      if(result) {
+        toast.success('Connexion réussie ! Bienvenue.');
+        const { user } = useAuthStore.getState();
+        navigate(getHomePath(user));
+      }
     } catch {
-      toast.error('Échec de la connexion. Vérifiez vos identifiants.');
+      toast.error('Identifiants incorrects.');
     }
   };
 
@@ -78,7 +85,9 @@ export function LoginPage() {
           <label className="lp-login-form__checkbox">
             <input
               type="checkbox"
+              name="remember"
               className="lp-login-form__checkbox-input"
+              checked={values.remember || false}
               onChange={(e) => setValue('remember', e.target.checked)}
             />
             <span className="lp-login-form__checkbox-custom" />

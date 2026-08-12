@@ -2,6 +2,8 @@ import { useState, useEffect, useRef } from 'react';
 import { Outlet, Link, useLocation, useNavigate, useParams } from 'react-router-dom';
 import { Package, Menu, X, User, LayoutDashboard, UserCircle, Settings, LogOut, Mail, Phone, MapPin } from 'lucide-react';
 import useEntrepriseStore from '../store/useEntrepriseStore';
+import useAuthStore from '../store/useAuthStore';
+import { getHomePath } from '../utils/homePath';
 import './PublicLayout.css';
 
 export default function PublicLayout() {
@@ -62,7 +64,7 @@ export default function PublicLayout() {
   const handleUserNav = (path) => { setUserOpen(false); navigate(path); };
 
   const displayName = company ? company.tradeName : 'LogisticPro';
-  const brandColor = company ? company.color : '#2563EB';
+  const brandColor = company ? company.color : '#863bff';
 
   return (
     <div className="pp-landing-layout">
@@ -71,8 +73,12 @@ export default function PublicLayout() {
           <Link to={basePath} className="pp-nav__brand">
             <svg width="32" height="32" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
               <rect width="32" height="32" rx="8" fill={brandColor} />
-              <path d="M8 16L14 10L20 16L14 22L8 16Z" fill="white" fillOpacity="0.9" />
-              <path d="M14 16L20 10L26 16L20 22L14 16Z" fill="white" fillOpacity="0.6" />
+              <g transform="translate(4 3.5)" stroke="#FFFFFF" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round" fill="none">
+                <path d="M11 21.73a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73z" />
+                <path d="M12 22V12" />
+                <polyline points="3.29 7 12 12 20.71 7" />
+                <path d="m7.5 4.27 9 5.15" />
+              </g>
             </svg>
             <span className="pp-nav__name">{displayName}</span>
           </Link>
@@ -103,13 +109,13 @@ export default function PublicLayout() {
                 <User size={20} />
               </button>
               <div className={`pp-nav__dropdown ${userOpen ? 'pp-nav__dropdown--open' : ''}`}>
-                <button className="pp-nav__dropdown-item" onClick={() => handleUserNav('/dashboard')}>
+                <button className="pp-nav__dropdown-item" onClick={() => handleUserNav(getHomePath(useAuthStore.getState().user))}>
                   <LayoutDashboard size={16} /> Tableau de bord
                 </button>
                 <button className="pp-nav__dropdown-item" onClick={() => handleUserNav('/clients')}>
                   <UserCircle size={16} /> Profil
                 </button>
-                <button className="pp-nav__dropdown-item" onClick={() => handleUserNav('/dashboard')}>
+                <button className="pp-nav__dropdown-item" onClick={() => handleUserNav(getHomePath(useAuthStore.getState().user))}>
                   <Settings size={16} /> Paramètres
                 </button>
                 <div className="pp-nav__dropdown-separator" />
@@ -159,8 +165,12 @@ export default function PublicLayout() {
             <div className="lp-footer__logo">
               <svg width="32" height="32" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
                 <rect width="32" height="32" rx="8" fill={brandColor} />
-                <path d="M8 16L14 10L20 16L14 22L8 16Z" fill="white" fillOpacity="0.9" />
-                <path d="M14 16L20 10L26 16L20 22L14 16Z" fill="white" fillOpacity="0.6" />
+                <g transform="translate(4 3.5)" stroke="#FFFFFF" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round" fill="none">
+                  <path d="M11 21.73a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73z" />
+                  <path d="M12 22V12" />
+                  <polyline points="3.29 7 12 12 20.71 7" />
+                  <path d="m7.5 4.27 9 5.15" />
+                </g>
               </svg>
               <span>{displayName}</span>
             </div>

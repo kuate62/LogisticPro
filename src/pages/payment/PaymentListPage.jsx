@@ -1,20 +1,22 @@
 import { useState, useEffect, useCallback } from 'react';
 import { Container, Row, Col, Button, Pagination } from 'react-bootstrap';
 import { RefreshCw, LayoutGrid, List, Plus } from 'lucide-react';
+import { Link, useNavigate } from 'react-router-dom';
 import { usePayments } from '../../hooks/usePayment';
 import { PaymentSummary, PaymentSearch, PaymentFilters, PaymentTable } from '../../components/payment';
 
 export default function PaymentListPage() {
   const { payments, loading, pagination, search, filters, sort, loadPayments, updateSearch, updateFilters, updateSort, goToPage } = usePayments();
   const [viewMode, setViewMode] = useState('table');
+  const navigate = useNavigate();
 
   useEffect(() => { loadPayments(); }, [loadPayments]);
 
   const handleRefresh = useCallback(() => { loadPayments(); }, [loadPayments]);
 
   const handleView = useCallback((payment) => {
-    window.location.href = `/payments/${payment.id}`;
-  }, []);
+    navigate(`/payments/${payment.id}`);
+  }, [navigate]);
 
   const pages = [];
   for (let i = 1; i <= pagination.totalPages; i++) {
@@ -33,9 +35,9 @@ export default function PaymentListPage() {
           <small className="text-muted">{pagination.total} enregistrements</small>
         </Col>
         <Col xs="auto" className="d-flex gap-2">
-          <a href="/payments/new" className="btn btn-primary btn-sm d-flex align-items-center gap-1">
+          <Link to="/payments/new" className="btn btn-primary btn-sm d-flex align-items-center gap-1">
             <Plus size={16} /> Nouveau paiement
-          </a>
+          </Link>
           <Button
             variant={viewMode === 'table' ? 'primary' : 'outline-primary'}
             size="sm"

@@ -7,8 +7,8 @@ import ShipmentStepper from '../../components/shipments/ShipmentStepper';
 import ShipmentWeightIndicator from '../../components/shipments/ShipmentWeightIndicator';
 import ShipmentPriceSummary from '../../components/shipments/ShipmentPriceSummary';
 import ShipmentPackageForm from '../../components/shipments/ShipmentPackageForm';
-import { mockClientsService } from '../../api/mockClients';
-import { mockAgenciesService } from '../../api/mockAgencies';
+import { clientsService } from '../../api/clientsService';
+import { agenciesService } from '../../api/agenciesService';
 import { useAuth } from '../../hooks/useAuth';
 
 export default function ShipmentCreatePage() {
@@ -26,8 +26,8 @@ export default function ShipmentCreatePage() {
 
   const loadData = async () => {
     const [c, a] = await Promise.all([
-      mockClientsService.getAll(companyId, { perPage: 100 }),
-      mockAgenciesService.getAll(companyId, { perPage: 100 }),
+      clientsService.list(companyId, { limit: 100 }),
+      agenciesService.list(companyId, { limit: 100 }),
     ]);
     setClients(c.data || []);
     setAgencies(a.data || []);
@@ -56,6 +56,7 @@ export default function ShipmentCreatePage() {
         destinationAgencyId: wizard.destinationAgencyId, destinationAgencyName: wizard.destinationAgencyName, destinationCity: wizard.destinationCity,
         routeId: wizard.routeId || null, routeName: wizard.routeName || '', maxWeight: wizard.maxWeight,
         packages: wizard.packages, observation: wizard.observation,
+        totalAmount: totals.totalAmount, paidAmount: 0,
       });
       toast.success(`Expédition ${shipment.shipmentNumber} créée`);
       resetWizard();

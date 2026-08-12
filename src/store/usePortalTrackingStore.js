@@ -1,4 +1,5 @@
 import { create } from 'zustand';
+import { trackingService } from '../api/trackingService';
 import { mockPortalTrackingService } from '../api/mockPortalTracking';
 import toast from 'react-hot-toast';
 
@@ -13,9 +14,9 @@ const usePortalTrackingStore = create((set) => ({
   searchByNumber: async (trackingNumber) => {
     set({ loading: true, error: null });
     try {
-      const result = await mockPortalTrackingService.searchByNumber(trackingNumber);
-      const timeline = await mockPortalTrackingService.getTimeline(trackingNumber);
-      await mockPortalTrackingService.addToHistory(trackingNumber, result.status);
+      const result = await trackingService.trackPublic(trackingNumber);
+      const timeline = result.timeline || [];
+      await mockPortalTrackingService.addToHistory(result.trackingNumber, result.status);
       const history = await mockPortalTrackingService.getHistory();
       set({ result, timeline, history, loading: false, searched: true });
       return result;

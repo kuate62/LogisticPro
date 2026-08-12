@@ -3,7 +3,7 @@ import {
   Settings, CreditCard, Route, LogOut,
   LayoutDashboard, Search, Tags, Repeat,
   UserCog, DollarSign,
-  Crown, Briefcase, Bell, User, Shield,
+  Crown, Briefcase, Bell, User, Shield, Inbox,
 } from 'lucide-react';
 
 export const NAV_ITEMS = [
@@ -31,6 +31,7 @@ export const SUPER_ADMIN_NAV = [
     { key: 'admin_subscriptions', label: 'Abonnements', icon: Repeat, path: '/admin/subscriptions' },
   ]},
   { key: 'admin_companies', label: 'Gestion des entreprises', icon: Building2, path: '/admin/companies' },
+  { key: 'admin_requests', label: 'Demandes partenaires', icon: Inbox, path: '/admin/requests' },
   { key: 'admin_users', label: 'Utilisateurs plateforme', icon: Users, children: [
     { key: 'admin_superadmins', label: 'Super Admins', icon: Shield, path: '/admin/super-admins' },
     { key: 'admin_managers', label: "Responsables d'entreprise", icon: Briefcase, path: '/admin/managers' },

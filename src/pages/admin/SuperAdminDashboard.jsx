@@ -1,11 +1,12 @@
 import { useState, useEffect } from 'react';
+import { Link } from 'react-router-dom';
 import {
   LineChart, Line, PieChart, Pie, Cell, XAxis, YAxis,
   CartesianGrid, Tooltip, ResponsiveContainer, Legend,
 } from 'recharts';
 import { Building2, TrendingUp, Users, Clock, DollarSign, AlertTriangle, CheckCircle } from 'lucide-react';
 import { KPICard, DashboardCard } from '../../components/dashboard';
-import { mockAdminService } from '../../api/mockAdmin';
+import { adminService } from '../../api/adminService';
 import './SuperAdminDashboard.css';
 
 const formatCurrency = (value) =>
@@ -34,8 +35,8 @@ export default function SuperAdminDashboard() {
     const load = async () => {
       try {
         const [dashStats, requests] = await Promise.all([
-          mockAdminService.getDashboardStats(),
-          mockAdminService.getRegistrationRequests(),
+          adminService.getDashboardStats(),
+          adminService.getRegistrationRequests(),
         ]);
         if (!mounted) return;
         const s = dashStats.stats;
@@ -148,7 +149,9 @@ export default function SuperAdminDashboard() {
       </div>
 
       <div className="sa-dashboard__lists-row">
-        <DashboardCard title="Demandes récentes" subtitle="5 dernières inscriptions" loading={loading} empty={recentRequests.length === 0 ? 'Aucune demande' : undefined} className="sa-dashboard__list-card" style={{ flex: 1 }}>
+        <DashboardCard title="Demandes récentes" subtitle="5 dernières inscriptions" loading={loading} empty={recentRequests.length === 0 ? 'Aucune demande' : undefined} className="sa-dashboard__list-card" style={{ flex: 1 }}
+          action={<Link className="sa-dashboard__card-link" to="/admin/requests">Tout voir</Link>}
+        >
           <ul className="sa-dashboard__list">
             {recentRequests.map((req) => {
               const status = STATUS_MAP[req.status] ?? STATUS_MAP.pending;

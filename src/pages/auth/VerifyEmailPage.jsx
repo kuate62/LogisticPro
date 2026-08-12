@@ -1,40 +1,60 @@
 import { useState, useEffect, useCallback } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import toast from 'react-hot-toast';
 import { AuthCard, AuthHeader } from '../../components/auth';
-import { FormField, EmailInput, LoadingButton, FormError } from '../../components/form';
+import { FormField, TextInput, LoadingButton, FormError } from '../../components/form';
 import { useAuth } from '../../hooks/useAuth';
-import { useForm } from '../../hooks/useForm';
-import { forgotPasswordSchema } from '../../helpers/validation';
-import { mockAuthService } from '../../api/mockAuth';
-import { MailCheck, RotateCcw, Pencil, ArrowLeft } from 'lucide-react';
+import useAuthStore from '../../store/useAuthStore';
+import { getHomePath } from '../../utils/homePath';
+import { MailCheck, RotateCcw, ArrowLeft } from 'lucide-react';
 import './VerifyEmailPage.css';
 
 const RESEND_DELAY = 60;
 
 export function VerifyEmailPage() {
-  const { user } = useAuth();
-  const [email, setEmail] = useState(user?.email || '');
-  const [mode, setMode] = useState('idle');
+  const navigate = useNavigate();
+  const { user, verifyEmail, regenerateCode } = useAuth();
+  const [code, setCode] = useState('');
+  const [error, setError] = useState(null);
+  const [loading, setLoading] = useState(false);
   const [countdown, setCountdown] = useState(0);
   const [resendLoading, setResendLoading] = useState(false);
-  const [resendError, setResendError] = useState(null);
 
-  const {
-    errors,
-    isSubmitting,
-    handleSubmit,
-    getFieldProps,
-  } = useForm({
-    schema: forgotPasswordSchema,
-    onSubmit: async (values) => {
-      await mockAuthService.updateEmail(values.email);
-      setEmail(values.email);
-      setMode('idle');
+  const handleVerify = async (e) => {
+    e.preventDefault();
+    if (code.length !== 6) {
+      setError('Le code doit contenir 6 chiffres.');
+      return;
+    }
+    setError(null);
+    setLoading(true);
+    try {
+      await verifyEmail(code);
+      toast.success('Compte vérifié ! Bienvenue.');
+      navigate(getHomePath(useAuthStore.getState().user));
+    } catch (err) {
+      setError(err.message || 'Code invalide ou expiré.');
+      toast.error('Code invalide ou expiré.');
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleResend = useCallback(async () => {
+    if (countdown > 0) return;
+    setResendLoading(true);
+    setError(null);
+    try {
+      await regenerateCode();
       setCountdown(RESEND_DELAY);
-      toast.success('Email mis à jour. Un nouveau lien a été envoyé.');
-    },
-  });
+      toast.success('Code de vérification renvoyé.');
+    } catch (err) {
+      setError(err.message || 'Échec de l\'envoi.');
+      toast.error('Échec de l\'envoi.');
+    } finally {
+      setResendLoading(false);
+    }
+  }, [countdown, regenerateCode]);
 
   useEffect(() => {
     if (countdown <= 0) return;
@@ -50,22 +70,6 @@ export function VerifyEmailPage() {
     return () => clearInterval(timer);
   }, [countdown]);
 
-  const handleResend = useCallback(async () => {
-    if (countdown > 0) return;
-    setResendLoading(true);
-    setResendError(null);
-    try {
-      await mockAuthService.resendVerification(email);
-      setCountdown(RESEND_DELAY);
-      toast.success('Email de vérification renvoyé.');
-    } catch (err) {
-      setResendError(err.message);
-      toast.error('Échec de l\'envoi.');
-    } finally {
-      setResendLoading(false);
-    }
-  }, [email, countdown]);
-
   const formatCountdown = (seconds) => {
     const m = Math.floor(seconds / 60);
     const s = seconds % 60;
@@ -75,91 +79,59 @@ export function VerifyEmailPage() {
   return (
     <AuthCard>
       <div className="lp-verify-email">
-        <div className={`lp-verify-email__icon ${mode === 'success' ? 'lp-verify-email__icon--pulse' : ''}`}>
+        <div className="lp-verify-email__icon">
           <MailCheck size={48} />
         </div>
 
-        {mode !== 'edit' && (
-          <>
-            <AuthHeader
-              title="Vérifiez votre email"
-              subtitle="Nous avons envoyé un lien de vérification à l'adresse ci-dessous. Cliquez sur le lien pour activer votre compte."
+        <AuthHeader
+          title="Vérifiez votre email"
+          subtitle="Saisissez le code à 6 chiffres reçu par email pour activer votre compte."
+        />
+
+        <p className="lp-verify-email__address">{user?.email}</p>
+
+        <FormError message={error} />
+
+        <form onSubmit={handleVerify} noValidate className="lp-verify-email__form">
+          <FormField label="Code de vérification" error={error} required>
+            <TextInput
+              placeholder="000000"
+              inputMode="numeric"
+              maxLength={6}
+              autoFocus
+              value={code}
+              onChange={(e) => setCode(e.target.value.replace(/\D/g, ''))}
             />
+          </FormField>
 
-            <p className="lp-verify-email__address">{email}</p>
+          <LoadingButton
+            type="submit"
+            variant="primary"
+            size="lg"
+            fullWidth
+            isLoading={loading}
+            loadingText="Vérification..."
+          >
+            Vérifier mon compte
+          </LoadingButton>
+        </form>
 
-            <FormError message={resendError} />
-
-            <div className="lp-verify-email__actions">
-              <LoadingButton
-                variant="primary"
-                size="lg"
-                fullWidth
-                isLoading={resendLoading}
-                loadingText="Envoi en cours..."
-                onClick={handleResend}
-                disabled={countdown > 0}
-                icon={RotateCcw}
-              >
-                {countdown > 0
-                  ? `Renvoyer dans ${formatCountdown(countdown)}`
-                  : 'Renvoyer l\'email'}
-              </LoadingButton>
-
-              <button
-                type="button"
-                className="lp-verify-email__edit-btn"
-                onClick={() => setMode('edit')}
-              >
-                <Pencil size={14} />
-                Modifier l'adresse email
-              </button>
-            </div>
-          </>
-        )}
-
-        {mode === 'edit' && (
-          <>
-            <AuthHeader
-              title="Modifier votre email"
-              subtitle="Entrez la nouvelle adresse email pour recevoir le lien de vérification."
-            />
-
-            <form
-              onSubmit={(e) => { setMode('success'); handleSubmit(e); }}
-              noValidate
-              className="lp-verify-email__edit-form"
-            >
-              <FormField label="Nouvelle adresse email" error={errors.email} required>
-                <EmailInput
-                  placeholder="exemple@email.com"
-                  autoComplete="email"
-                  {...getFieldProps('email')}
-                />
-              </FormField>
-
-              <div className="lp-verify-email__edit-actions">
-                <LoadingButton
-                  type="submit"
-                  variant="primary"
-                  size="md"
-                  isLoading={isSubmitting}
-                  loadingText="Mise à jour..."
-                >
-                  Confirmer
-                </LoadingButton>
-                <LoadingButton
-                  type="button"
-                  variant="secondary"
-                  size="md"
-                  onClick={() => setMode('idle')}
-                >
-                  Annuler
-                </LoadingButton>
-              </div>
-            </form>
-          </>
-        )}
+        <div className="lp-verify-email__actions">
+          <LoadingButton
+            variant="secondary"
+            size="md"
+            fullWidth
+            isLoading={resendLoading}
+            loadingText="Envoi en cours..."
+            onClick={handleResend}
+            disabled={countdown > 0}
+            icon={RotateCcw}
+          >
+            {countdown > 0
+              ? `Renvoyer dans ${formatCountdown(countdown)}`
+              : 'Renvoyer le code'}
+          </LoadingButton>
+        </div>
 
         <Link to="/login" className="lp-verify-email__back">
           <ArrowLeft size={16} />

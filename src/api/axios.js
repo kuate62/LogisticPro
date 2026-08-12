@@ -2,8 +2,8 @@ import axios from 'axios';
 import { STORAGE_KEYS } from '../config/constants';
 
 const apiClient = axios.create({
-  baseURL: import.meta.env.VITE_API_URL || '/api',
-  timeout: 15000,
+  baseURL: import.meta.env.VITE_API_URL || 'http://localhost:3000/api',
+  timeout: 10000,
   headers: {
     'Content-Type': 'application/json',
   },
@@ -22,8 +22,6 @@ apiClient.interceptors.response.use(
   (error) => {
     if (error.response?.status === 401) {
       localStorage.removeItem(STORAGE_KEYS.ACCESS_TOKEN);
-      localStorage.removeItem(STORAGE_KEYS.REFRESH_TOKEN);
-      localStorage.removeItem(STORAGE_KEYS.USER);
       window.location.href = '/login';
     }
     return Promise.reject(error);

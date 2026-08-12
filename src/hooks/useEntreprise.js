@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import useEntrepriseStore from '../store/useEntrepriseStore';
-import { mockAgenciesService } from '../api/mockAgencies';
+import { agenciesService } from '../api/agenciesService';
 
 export function useCompanies() {
   const companies = useEntrepriseStore((s) => s.companies);
@@ -32,7 +32,7 @@ export function useCompanyAgencies(companyId) {
   useEffect(() => {
     if (!companyId) return;
     let cancelled = false;
-    mockAgenciesService.getAll(companyId).then((data) => {
+    agenciesService.getAll(companyId).then((data) => {
       if (!cancelled) setState({ agencies: data, loading: false });
     }).catch(() => { if (!cancelled) setState((prev) => ({ ...prev, loading: false })); });
     return () => { cancelled = true; };

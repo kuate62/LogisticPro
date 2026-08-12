@@ -1,20 +1,22 @@
 import { useState, useEffect, useCallback } from 'react';
 import { Container, Row, Col, Button, Pagination } from 'react-bootstrap';
 import { RefreshCw, LayoutGrid, List } from 'lucide-react';
+import { useNavigate } from 'react-router-dom';
 import { useTracking } from '../../hooks/useTracking';
 import { TrackingSummary, TrackingSearch, TrackingFilters, TrackingTable, TrackingCard } from '../../components/tracking';
 
 export default function TrackingListPage() {
   const { trackings, loading, pagination, search, filters, sort, loadTrackings, updateSearch, updateFilters, updateSort, goToPage } = useTracking();
   const [viewMode, setViewMode] = useState('table');
+  const navigate = useNavigate();
 
   useEffect(() => { loadTrackings(); }, [loadTrackings]);
 
   const handleRefresh = useCallback(() => { loadTrackings(); }, [loadTrackings]);
 
   const handleView = useCallback((tracking) => {
-    window.location.href = `/tracking/${tracking.id}`;
-  }, []);
+    navigate(`/tracking/${tracking.id}`);
+  }, [navigate]);
 
   const pages = [];
   for (let i = 1; i <= pagination.totalPages; i++) {

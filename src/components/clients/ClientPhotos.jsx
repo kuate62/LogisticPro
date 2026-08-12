@@ -1,11 +1,11 @@
 import { Camera, Trash2 } from 'lucide-react';
 import { useAuth } from '../../hooks/useAuth';
-import useClientStore from '../../store/useClientStore';
+import useClientsStore from '../../store/useClientsStore';
 import toast from 'react-hot-toast';
 
 export default function ClientPhotos({ photos, loading, clientId }) {
   const { companyId } = useAuth();
-  const { addPhoto, removePhoto } = useClientStore();
+  const { addPhoto, removePhoto } = useClientsStore();
 
   const handleUpload = async () => {
     const name = prompt('Nom de la photo:') || 'Photo de profil';

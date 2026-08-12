@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { Form, Button, Row, Col } from 'react-bootstrap';
 import { Plus, Edit, Trash2 } from 'lucide-react';
-import { PACKAGE_CATEGORIES } from '../../api/mockShipments';
+import { PACKAGE_CATEGORIES } from '../../config/constants';
 import toast from 'react-hot-toast';
 
 export default function ShipmentPackageForm({ packages, maxWeight, currentWeight, onAdd, onUpdate, onRemove }) {

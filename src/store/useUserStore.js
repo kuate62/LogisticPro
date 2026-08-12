@@ -1,5 +1,5 @@
 import { create } from 'zustand';
-import { mockUsersService } from '../api/mockUsers';
+import { usersService } from '../api/usersService';
 
 const useUserStore = create((set, get) => ({
   users: [],
@@ -23,7 +23,7 @@ const useUserStore = create((set, get) => ({
     const { search, filters, sort, pagination } = get();
     set((s) => ({ loading: { ...s.loading, list: true }, error: null }));
     try {
-      const result = await mockUsersService.getAll(companyId, { search, filters, sort, page: pagination.page, perPage: pagination.perPage });
+      const result = await usersService.getAll(companyId, { search, filters, sort, page: pagination.page, perPage: pagination.perPage });
       set({ users: result.data, pagination: { page: result.page, perPage: result.perPage, total: result.total, totalPages: result.totalPages }, loading: { ...get().loading, list: false } });
     } catch (err) { set({ loading: { ...get().loading, list: false }, error: err.message }); }
   },
@@ -31,7 +31,7 @@ const useUserStore = create((set, get) => ({
   fetchUserDetail: async (companyId, userId) => {
     set((s) => ({ loading: { ...s.loading, detail: true }, error: null }));
     try {
-      const user = await mockUsersService.getById(companyId, userId);
+      const user = await usersService.getById(companyId, userId);
       set({ selectedUser: user, loading: { ...get().loading, detail: false } });
     } catch (err) { set({ loading: { ...get().loading, detail: false }, error: err.message }); }
   },
@@ -39,7 +39,7 @@ const useUserStore = create((set, get) => ({
   fetchUserHistory: async (companyId, userId) => {
     set((s) => ({ loading: { ...s.loading, history: true } }));
     try {
-      const history = await mockUsersService.getHistory(companyId, userId);
+      const history = await usersService.getHistory(companyId, userId);
       set({ userHistory: history, loading: { ...get().loading, history: false } });
     } catch { set({ loading: { ...get().loading, history: false } }); }
   },
@@ -47,7 +47,7 @@ const useUserStore = create((set, get) => ({
   fetchCounts: async (companyId) => {
     set((s) => ({ loading: { ...s.loading, counts: true } }));
     try {
-      const counts = await mockUsersService.getCount(companyId);
+      const counts = await usersService.getCount(companyId);
       set({ counts, loading: { ...get().loading, counts: false } });
     } catch { set({ loading: { ...get().loading, counts: false } }); }
   },
@@ -55,7 +55,7 @@ const useUserStore = create((set, get) => ({
   createUser: async (companyId, data) => {
     set((s) => ({ loading: { ...s.loading, create: true }, error: null }));
     try {
-      const user = await mockUsersService.create(companyId, data);
+      const user = await usersService.create(companyId, data);
       set((s) => ({ users: [user, ...s.users], loading: { ...s.loading, create: false } }));
       return user;
     } catch (err) { set({ loading: { ...get().loading, create: false }, error: err.message }); throw err; }
@@ -64,7 +64,7 @@ const useUserStore = create((set, get) => ({
   updateUser: async (companyId, userId, data) => {
     set((s) => ({ loading: { ...s.loading, update: true }, error: null }));
     try {
-      const user = await mockUsersService.update(companyId, userId, data);
+      const user = await usersService.update(companyId, userId, data);
       set((s) => ({
         users: s.users.map((u) => u.id === userId ? user : u),
         selectedUser: s.selectedUser?.id === userId ? user : s.selectedUser,
@@ -77,7 +77,7 @@ const useUserStore = create((set, get) => ({
   toggleUserStatus: async (companyId, userId) => {
     set((s) => ({ loading: { ...s.loading, toggle: true } }));
     try {
-      const user = await mockUsersService.toggleStatus(companyId, userId);
+      const user = await usersService.toggleStatus(companyId, userId);
       set((s) => ({
         users: s.users.map((u) => u.id === userId ? user : u),
         selectedUser: s.selectedUser?.id === userId ? user : s.selectedUser,
@@ -90,7 +90,7 @@ const useUserStore = create((set, get) => ({
   resetPassword: async (companyId, userId) => {
     set((s) => ({ loading: { ...s.loading, reset: true } }));
     try {
-      const result = await mockUsersService.resetPassword(companyId, userId);
+      const result = await usersService.resetPassword(companyId, userId);
       set((s) => ({ loading: { ...s.loading, reset: false } }));
       return result;
     } catch (err) { set({ loading: { ...get().loading, reset: false } }); throw err; }

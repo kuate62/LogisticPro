@@ -6,7 +6,7 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import toast from 'react-hot-toast';
 import { useRouteForm } from '../../hooks/useTransportRoute';
 import { routeFormSchema, routeFormValuesToPayload } from '../../helpers/routeValidation';
-import { mockAgenciesService } from '../../api/mockAgencies';
+import { agenciesService } from '../../api/agenciesService';
 import { useAuth } from '../../hooks/useAuth';
 
 const DEFAULT_VALUES = {
@@ -39,7 +39,7 @@ export function RouteCreatePage() {
   });
 
   useEffect(() => {
-    mockAgenciesService.getAll(companyId, { perPage: 100 }).then((res) => setAgencies(res.data || []));
+    agenciesService.getAll(companyId, { perPage: 100 }).then((res) => setAgencies(res.data || []));
   }, [companyId]);
 
   const originAgencyId = watch('originAgencyId');

@@ -1,6 +1,6 @@
 import { Filter, X } from 'lucide-react';
 import { SHIPMENT_STATUS } from '../../config/constants';
-import { mockAgenciesService } from '../../api/mockAgencies';
+import { agenciesService } from '../../api/agenciesService';
 import { useAuth } from '../../hooks/useAuth';
 import { useState, useEffect } from 'react';
 
@@ -9,7 +9,7 @@ export default function ShipmentFilters({ filters, onChange, onReset }) {
   const [agencies, setAgencies] = useState([]);
   const [show, setShow] = useState(false);
 
-  useEffect(() => { mockAgenciesService.getAll(companyId, { perPage: 100 }).then((r) => setAgencies(r.data || [])); }, [companyId]);
+  useEffect(() => { agenciesService.getAll(companyId, { perPage: 100 }).then((r) => setAgencies(r.data || [])); }, [companyId]);
 
   const activeCount = Object.values(filters).filter((v) => v !== '').length;
 

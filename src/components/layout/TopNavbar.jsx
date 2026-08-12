@@ -52,7 +52,7 @@ export function TopNavbar({ onToggleSidebar }) {
         </button>
         <div className="lp-topnavbar__welcome">
           <h2 className="lp-topnavbar__greeting">
-            {isSuperAdmin ? 'Panneau d\'administration' : `Bonjour, ${user?.firstName}`}
+            {isSuperAdmin ? 'Panneau d\'administration' : `Bonjour, ${user?.firstName || user?.firstname || ''}`}
           </h2>
           <p className="lp-topnavbar__date">{today}</p>
         </div>
@@ -102,11 +102,13 @@ export function TopNavbar({ onToggleSidebar }) {
             aria-label="Menu utilisateur"
           >
             <div className="lp-topnavbar__avatar">
-              {user?.firstName?.[0]}{user?.lastName?.[0]}
+              {user?.initials || `${user?.firstName?.[0] || ''}${user?.lastName?.[0] || ''}`}
             </div>
             <div className="lp-topnavbar__user-info">
-              <span className="lp-topnavbar__user-name">{user?.firstName} {user?.lastName}</span>
-              <span className="lp-topnavbar__user-role">{ROLE_LABELS[user?.role] || user?.role}</span>
+              <span className="lp-topnavbar__user-name">
+                {user?.fullName || `${user?.firstName || user?.firstname || ''} ${user?.lastName || user?.lastname || ''}`.trim()}
+              </span>
+              <span className="lp-topnavbar__user-role">{ROLE_LABELS[user?.role] || user?.role || 'Utilisateur'}</span>
             </div>
             <ChevronDown size={16} className="lp-topnavbar__chevron" />
           </button>

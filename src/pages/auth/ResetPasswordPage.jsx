@@ -4,6 +4,8 @@ import toast from 'react-hot-toast';
 import { AuthCard, AuthHeader, AuthFooter } from '../../components/auth';
 import {
   FormField,
+  EmailInput,
+  TextInput,
   PasswordInput,
   PasswordStrength,
   LoadingButton,
@@ -30,7 +32,11 @@ export function ResetPasswordPage() {
   } = useForm({
     schema: resetPasswordSchema,
     onSubmit: async (data) => {
-      await resetPassword({ token: 'mock-token', password: data.password });
+      await resetPassword({
+        email: data.email,
+        code: data.code,
+        password: data.password,
+      });
     },
   });
 
@@ -76,12 +82,29 @@ export function ResetPasswordPage() {
     <AuthCard>
       <AuthHeader
         title="Nouveau mot de passe"
-        subtitle="Choisissez un mot de passe sécurisé pour votre compte"
+        subtitle="Saisissez le code reçu par email puis choisissez un nouveau mot de passe"
       />
 
       <FormError message={submitError} />
 
       <form onSubmit={onSubmit} noValidate className="lp-reset-form">
+        <FormField label="Adresse email" error={errors.email} required>
+          <EmailInput
+            placeholder="vous@exemple.com"
+            autoComplete="email"
+            {...getFieldProps('email')}
+          />
+        </FormField>
+
+        <FormField label="Code de vérification" error={errors.code} required>
+          <TextInput
+            placeholder="000000"
+            inputMode="numeric"
+            maxLength={6}
+            {...getFieldProps('code')}
+          />
+        </FormField>
+
         <FormField label="Nouveau mot de passe" error={errors.password} required>
           <PasswordInput
             ref={passwordRef}

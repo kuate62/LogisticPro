@@ -1,3 +1,6 @@
+import { Navigate, Link } from 'react-router-dom';
+import { useAuth } from '../../hooks/useAuth';
+import { ROLES, PAYMENT_METHOD_LABELS } from '../../config/constants';
 import { useDashboard } from '../../hooks/useDashboard';
 import { KPICard, DashboardCard, QuickAction } from '../../components/dashboard';
 import {
@@ -12,18 +15,30 @@ import {
 } from 'recharts';
 import './DashboardPage.css';
 
-const ALERT_COLORS = { delayed: 'warning', blocked: 'danger', damaged: 'danger', unclaimed: 'info', no_route: 'secondary' };
-const ALERT_LABELS = { delayed: 'En retard', blocked: 'Bloqué', damaged: 'Endommagé', unclaimed: 'Non récupéré', no_route: 'Sans trajet' };
 const ROUTE_STATUS = { in_transit: 'En transit', arrived: 'Arrivé', departed: 'Départi', scheduled: 'Planifié' };
 const ROUTE_STATUS_COLOR = { in_transit: 'info', arrived: 'success', departed: 'primary', scheduled: 'secondary' };
-const PAYMENT_METHOD = { cash: 'Espèces', mobile_money: 'Mobile Money', bank_transfer: 'Virement', card: 'Carte' };
-const PAYMENT_STATUS = { completed: 'Complété', pending: 'En attente' };
+const PAYMENT_STATUS = { completed: 'Complété', pending: 'En attente', partial: 'Partiel', refunded: 'Remboursé', failed: 'Échoué', cancelled: 'Annulé' };
+const PARCEL_STATUS = {
+  registered: 'Enregistré', preparing: 'En préparation', in_transit: 'En transit',
+  arrived: 'Arrivé', available_pickup: 'Disponible au retrait', collected: 'Récupéré',
+  delivered: 'Livré', damaged: 'Endommagé', cancelled: 'Annulé', validated: 'Validé',
+};
+const PARCEL_STATUS_COLOR = {
+  registered: 'info', preparing: 'primary', in_transit: 'info', arrived: 'success',
+  available_pickup: 'success', collected: 'secondary', delivered: 'success',
+  damaged: 'danger', cancelled: 'danger', validated: 'info',
+};
 const AGENDA_STATUS = { done: 'Terminé', active: 'En cours', pending: 'À venir' };
 
 export function DashboardPage() {
+  const { user } = useAuth();
   const d = useDashboard();
   const kpi = d.kpis;
   const loading = d.loading;
+
+  if (user?.role === ROLES.CLIENT) {
+    return <Navigate to="/dashboard/client" replace />;
+  }
 
   const pct = (cur, prev) => {
     if (!prev) return { trend: 'neutral', value: '—' };
@@ -182,21 +197,20 @@ export function DashboardPage() {
           </div>
         </DashboardCard>
 
-        <DashboardCard title="Alertes colis" subtitle="Nécessitent une attention" loading={loading.packageAlerts} empty={d.packageAlerts.length === 0 ? 'Aucune alerte' : null}>
+        <DashboardCard title="Suivi des colis" subtitle="Derniers colis et événements" loading={loading.packageAlerts} empty={d.packageAlerts.length === 0 ? 'Aucun colis' : null}>
           <div className="lp-alert-list">
             {d.packageAlerts.map((a) => (
-              <div key={a.id} className="lp-alert-item">
-                <div className={`lp-alert-item__badge lp-badge lp-badge--${ALERT_COLORS[a.status]}`}>
-                  {ALERT_LABELS[a.status]}
+              <Link key={a.id} to={`/packages/${a.id}`} className="lp-alert-item" style={{ textDecoration: 'none', color: 'inherit' }}>
+                <div className={`lp-alert-item__badge lp-badge lp-badge--${PARCEL_STATUS_COLOR[a.status] || 'secondary'}`}>
+                  {PARCEL_STATUS[a.status] || a.status}
                 </div>
                 <div className="lp-alert-item__content">
                   <p className="lp-alert-item__tracking">{a.tracking}</p>
                   <p className="lp-alert-item__dest">{a.destination} → {a.recipient}</p>
+                  {a.lastEvent?.description && <p className="lp-alert-item__event">{a.lastEvent.description}</p>}
                 </div>
-                {a.daysLate > 0 && (
-                  <span className="lp-alert-item__days">{a.daysLate}j</span>
-                )}
-              </div>
+                {a.lastDate && <span className="lp-alert-item__time">{d.formatTime(a.lastDate)}</span>}
+              </Link>
             ))}
           </div>
         </DashboardCard>
@@ -207,19 +221,19 @@ export function DashboardPage() {
         <DashboardCard
           title="Paiements récents"
           loading={loading.recentPayments}
-          action={<button className="lp-dcard-link" onClick={() => {}}>Historique <ArrowRight size={14} /></button>}
+          action={<Link to="/payments" className="lp-dcard-link">Historique <ArrowRight size={14} /></Link>}
           empty={d.recentPayments.length === 0 ? 'Aucun paiement' : null}
         >
           <div className="lp-payment-list">
             {d.recentPayments.map((p) => (
-              <div key={p.id} className="lp-payment-item">
+              <Link key={p.id} to={`/payments/${p.id}`} className="lp-payment-item" style={{ textDecoration: 'none', color: 'inherit' }}>
                 <div className="lp-payment-item__client">{p.client}</div>
                 <div className="lp-payment-item__details">
                   <span className="lp-payment-item__amount">{d.formatCurrency(p.amount)}</span>
-                  <span className="lp-payment-item__method">{PAYMENT_METHOD[p.method]}</span>
-                  <span className={`lp-badge lp-badge--${p.status === 'completed' ? 'success' : 'warning'}`}>{PAYMENT_STATUS[p.status]}</span>
+                  <span className="lp-payment-item__method">{PAYMENT_METHOD_LABELS[p.method] || p.method}</span>
+                  <span className={`lp-badge lp-badge--${p.status === 'completed' ? 'success' : p.status === 'pending' || p.status === 'partial' ? 'warning' : 'danger'}`}>{PAYMENT_STATUS[p.status] || p.status}</span>
                 </div>
-              </div>
+              </Link>
             ))}
           </div>
         </DashboardCard>

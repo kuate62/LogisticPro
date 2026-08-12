@@ -1,11 +1,11 @@
 import { FileText, Upload, Trash2, Download, Eye } from 'lucide-react';
 import { useAuth } from '../../hooks/useAuth';
-import useClientStore from '../../store/useClientStore';
+import useClientsStore from '../../store/useClientsStore';
 import toast from 'react-hot-toast';
 
 export default function ClientDocuments({ documents, loading, clientId }) {
   const { companyId } = useAuth();
-  const { addDocument, removeDocument } = useClientStore();
+  const { addDocument, removeDocument } = useClientsStore();
 
   const handleUpload = async () => {
     const name = prompt('Nom du document:');

@@ -1,5 +1,5 @@
 import { create } from 'zustand';
-import { mockRoutesService } from '../api/mockTransportRoutes';
+import { routesService } from '../api/routesService';
 
 const useRouteStore = create((set, get) => ({
   routes: [],
@@ -23,7 +23,7 @@ const useRouteStore = create((set, get) => ({
     const { search, filters, sort, pagination } = get();
     set((s) => ({ loading: { ...s.loading, list: true }, error: null }));
     try {
-      const result = await mockRoutesService.getAll(companyId, { search, filters, sort, page: pagination.page, perPage: pagination.perPage });
+      const result = await routesService.getAll(companyId, { search, filters, sort, page: pagination.page, perPage: pagination.perPage });
       set({ routes: result.data, pagination: { page: result.page, perPage: result.perPage, total: result.total, totalPages: result.totalPages }, loading: { ...get().loading, list: false } });
     } catch (err) { set({ loading: { ...get().loading, list: false }, error: err.message }); }
   },
@@ -31,7 +31,7 @@ const useRouteStore = create((set, get) => ({
   fetchRouteDetail: async (companyId, routeId) => {
     set((s) => ({ loading: { ...s.loading, detail: true }, error: null }));
     try {
-      const route = await mockRoutesService.getById(companyId, routeId);
+      const route = await routesService.getById(companyId, routeId);
       set({ selectedRoute: route, loading: { ...get().loading, detail: false } });
     } catch (err) { set({ loading: { ...get().loading, detail: false }, error: err.message }); }
   },
@@ -39,7 +39,7 @@ const useRouteStore = create((set, get) => ({
   fetchHistory: async (companyId, routeId) => {
     set((s) => ({ loading: { ...s.loading, history: true } }));
     try {
-      const history = await mockRoutesService.getHistory(companyId, routeId);
+      const history = await routesService.getHistory(companyId, routeId);
       set({ history, loading: { ...get().loading, history: false } });
     } catch { set({ loading: { ...get().loading, history: false } }); }
   },
@@ -47,7 +47,7 @@ const useRouteStore = create((set, get) => ({
   fetchStatistics: async (companyId) => {
     set((s) => ({ loading: { ...s.loading, stats: true } }));
     try {
-      const statistics = await mockRoutesService.getStatistics(companyId);
+      const statistics = await routesService.getStatistics(companyId);
       set({ statistics, loading: { ...get().loading, stats: false } });
     } catch { set({ loading: { ...get().loading, stats: false } }); }
   },
@@ -55,7 +55,7 @@ const useRouteStore = create((set, get) => ({
   createRoute: async (companyId, data) => {
     set((s) => ({ loading: { ...s.loading, create: true }, error: null }));
     try {
-      const route = await mockRoutesService.create(companyId, data);
+      const route = await routesService.create(companyId, data);
       set((s) => ({ routes: [route, ...s.routes], loading: { ...s.loading, create: false } }));
       return route;
     } catch (err) { set({ loading: { ...get().loading, create: false }, error: err.message }); throw err; }
@@ -64,7 +64,7 @@ const useRouteStore = create((set, get) => ({
   updateRoute: async (companyId, routeId, data) => {
     set((s) => ({ loading: { ...s.loading, update: true }, error: null }));
     try {
-      const route = await mockRoutesService.update(companyId, routeId, data);
+      const route = await routesService.update(companyId, routeId, data);
       set((s) => ({
         routes: s.routes.map((r) => r.id === routeId ? route : r),
         selectedRoute: s.selectedRoute?.id === routeId ? route : s.selectedRoute,
@@ -77,7 +77,7 @@ const useRouteStore = create((set, get) => ({
   cancelRoute: async (companyId, routeId) => {
     set((s) => ({ loading: { ...s.loading, cancel: true } }));
     try {
-      const route = await mockRoutesService.cancel(companyId, routeId);
+      const route = await routesService.cancel(companyId, routeId);
       set((s) => ({
         routes: s.routes.map((r) => r.id === routeId ? route : r),
         selectedRoute: s.selectedRoute?.id === routeId ? route : s.selectedRoute,
@@ -88,7 +88,7 @@ const useRouteStore = create((set, get) => ({
   },
 
   assignShipment: async (companyId, routeId, shipment) => {
-    const route = await mockRoutesService.assignShipment(companyId, routeId, shipment);
+    const route = await routesService.assignShipment(companyId, routeId, shipment);
     set((s) => ({
       routes: s.routes.map((r) => r.id === routeId ? route : r),
       selectedRoute: s.selectedRoute?.id === routeId ? route : s.selectedRoute,
@@ -97,7 +97,7 @@ const useRouteStore = create((set, get) => ({
   },
 
   removeShipment: async (companyId, routeId, shipmentId) => {
-    const route = await mockRoutesService.removeShipment(companyId, routeId, shipmentId);
+    const route = await routesService.removeShipment(companyId, routeId, shipmentId);
     set((s) => ({
       routes: s.routes.map((r) => r.id === routeId ? route : r),
       selectedRoute: s.selectedRoute?.id === routeId ? route : s.selectedRoute,

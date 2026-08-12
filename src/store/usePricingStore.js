@@ -1,5 +1,5 @@
 import { create } from 'zustand';
-import { mockPricingService } from '../api/mockPricing';
+import { pricesService } from '../api/pricesService';
 
 const usePricingStore = create((set, get) => ({
   pricings: [],
@@ -24,7 +24,7 @@ const usePricingStore = create((set, get) => ({
     const { search, filters, sort, pagination } = get();
     set((s) => ({ loading: { ...s.loading, list: true }, error: null }));
     try {
-      const result = await mockPricingService.getAll(companyId, { search, filters, sort, page: pagination.page, perPage: pagination.perPage });
+      const result = await pricesService.getAll(companyId, { search, filters, sort, page: pagination.page, perPage: pagination.perPage });
       set({ pricings: result.data, pagination: { page: result.page, perPage: result.perPage, total: result.total, totalPages: result.totalPages }, loading: { ...get().loading, list: false } });
     } catch (err) { set({ loading: { ...get().loading, list: false }, error: err.message }); }
   },
@@ -32,7 +32,7 @@ const usePricingStore = create((set, get) => ({
   fetchPricingDetail: async (companyId, pricingId) => {
     set((s) => ({ loading: { ...s.loading, detail: true }, error: null }));
     try {
-      const pricing = await mockPricingService.getById(companyId, pricingId);
+      const pricing = await pricesService.getById(companyId, pricingId);
       set({ selectedPricing: pricing, loading: { ...get().loading, detail: false } });
     } catch (err) { set({ loading: { ...get().loading, detail: false }, error: err.message }); }
   },
@@ -40,7 +40,7 @@ const usePricingStore = create((set, get) => ({
   fetchHistory: async (companyId, pricingId) => {
     set((s) => ({ loading: { ...s.loading, history: true } }));
     try {
-      const history = await mockPricingService.getHistory(companyId, pricingId);
+      const history = await pricesService.getHistory(companyId, pricingId);
       set({ history, loading: { ...get().loading, history: false } });
     } catch { set({ loading: { ...get().loading, history: false } }); }
   },
@@ -48,7 +48,7 @@ const usePricingStore = create((set, get) => ({
   fetchStatistics: async (companyId) => {
     set((s) => ({ loading: { ...s.loading, stats: true } }));
     try {
-      const statistics = await mockPricingService.getStatistics(companyId);
+      const statistics = await pricesService.getStatistics(companyId);
       set({ statistics, loading: { ...get().loading, stats: false } });
     } catch { set({ loading: { ...get().loading, stats: false } }); }
   },
@@ -56,7 +56,7 @@ const usePricingStore = create((set, get) => ({
   createPricing: async (companyId, data) => {
     set((s) => ({ loading: { ...s.loading, create: true }, error: null }));
     try {
-      const pricing = await mockPricingService.create(companyId, data);
+      const pricing = await pricesService.create(companyId, data);
       set((s) => ({ pricings: [pricing, ...s.pricings], loading: { ...s.loading, create: false } }));
       return pricing;
     } catch (err) { set({ loading: { ...get().loading, create: false }, error: err.message }); throw err; }
@@ -65,7 +65,7 @@ const usePricingStore = create((set, get) => ({
   updatePricing: async (companyId, pricingId, data) => {
     set((s) => ({ loading: { ...s.loading, update: true }, error: null }));
     try {
-      const pricing = await mockPricingService.update(companyId, pricingId, data);
+      const pricing = await pricesService.update(companyId, pricingId, data);
       set((s) => ({
         pricings: s.pricings.map((p) => p.id === pricingId ? pricing : p),
         selectedPricing: s.selectedPricing?.id === pricingId ? pricing : s.selectedPricing,
@@ -76,7 +76,7 @@ const usePricingStore = create((set, get) => ({
   },
 
   activatePricing: async (companyId, pricingId) => {
-    const pricing = await mockPricingService.activate(companyId, pricingId);
+    const pricing = await pricesService.activate(companyId, pricingId);
     set((s) => ({
       pricings: s.pricings.map((p) => p.id === pricingId ? pricing : p),
       selectedPricing: s.selectedPricing?.id === pricingId ? pricing : s.selectedPricing,
@@ -85,7 +85,7 @@ const usePricingStore = create((set, get) => ({
   },
 
   deactivatePricing: async (companyId, pricingId) => {
-    const pricing = await mockPricingService.deactivate(companyId, pricingId);
+    const pricing = await pricesService.deactivate(companyId, pricingId);
     set((s) => ({
       pricings: s.pricings.map((p) => p.id === pricingId ? pricing : p),
       selectedPricing: s.selectedPricing?.id === pricingId ? pricing : s.selectedPricing,
@@ -94,7 +94,7 @@ const usePricingStore = create((set, get) => ({
   },
 
   duplicatePricing: async (companyId, pricingId) => {
-    const pricing = await mockPricingService.duplicate(companyId, pricingId);
+    const pricing = await pricesService.duplicate(companyId, pricingId);
     set((s) => ({ pricings: [pricing, ...s.pricings] }));
     return pricing;
   },
@@ -102,7 +102,7 @@ const usePricingStore = create((set, get) => ({
   calculatePricing: async (companyId, params) => {
     set((s) => ({ loading: { ...s.loading, calc: true } }));
     try {
-      const calc = await mockPricingService.calculate(companyId, params);
+      const calc = await pricesService.calculate(companyId, params);
       set({ calculation: calc, loading: { ...get().loading, calc: false } });
       return calc;
     } catch (err) { set({ loading: { ...get().loading, calc: false } }); throw err; }

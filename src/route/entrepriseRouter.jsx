@@ -1,5 +1,5 @@
 import PublicLayout from '../layouts/PublicLayout';
-import AuthLayout from '../layouts/AuthLayout';
+import SaaSLayout from '../layouts/SaaSLayout';
 import SaasHomePage from '../pages/saas/HomePage';
 import CompanyCatalogPage from '../pages/catalog/CompanyCatalogPage';
 import HomePage from '../pages/landing/HomePage';
@@ -10,13 +10,16 @@ import FAQPage from '../pages/landing/FAQPage';
 import ContactPage from '../pages/landing/ContactPage';
 import TrackPage from '../pages/tracking/TrackPage';
 import TarifPage from '../pages/landing/TarifPage';
+import PartnerPage from '../pages/saas/PartnerPage';
 
 const entrepriseRouter = [
   {
-    element: <AuthLayout />,
+    element: <SaaSLayout />,
     children: [
       { index: true, element: <SaasHomePage /> },
       { path: 'entreprises', element: <CompanyCatalogPage /> },
+      { path: 'suivi', element: <TrackPage /> },
+      { path: 'devenir-partenaire', element: <PartnerPage /> },
     ],
   },
   {

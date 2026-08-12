@@ -12,6 +12,10 @@ export const loginSchema = z.object({
   remember: z.boolean().optional().default(false),
 });
 
+const passwordPattern = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
+const passwordMessage =
+  'Le mot de passe doit contenir au moins une majuscule, une minuscule, un chiffre et un caractère spécial (@$!%*?&)';
+
 export const registerSchema = z.object({
   firstName: z
     .string()
@@ -34,10 +38,7 @@ export const registerSchema = z.object({
     .string()
     .min(1, 'Le mot de passe est requis')
     .min(8, 'Le mot de passe doit contenir au moins 8 caractères')
-    .regex(
-      /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)/,
-      'Le mot de passe doit contenir au moins une majuscule, une minuscule et un chiffre'
-    ),
+    .regex(passwordPattern, passwordMessage),
   confirmPassword: z
     .string()
     .min(1, 'Confirmez votre mot de passe'),
@@ -60,14 +61,19 @@ export const forgotPasswordSchema = z.object({
 });
 
 export const resetPasswordSchema = z.object({
+  email: z
+    .string()
+    .min(1, 'L\'email est requis')
+    .email('Adresse email invalide'),
+  code: z
+    .string()
+    .min(1, 'Le code est requis')
+    .regex(/^\d{6}$/, 'Le code doit contenir 6 chiffres'),
   password: z
     .string()
     .min(1, 'Le mot de passe est requis')
     .min(8, 'Le mot de passe doit contenir au moins 8 caractères')
-    .regex(
-      /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)/,
-      'Le mot de passe doit contenir au moins une majuscule, une minuscule et un chiffre'
-    ),
+    .regex(passwordPattern, passwordMessage),
   confirmPassword: z
     .string()
     .min(1, 'Confirmez votre mot de passe'),
@@ -75,6 +81,29 @@ export const resetPasswordSchema = z.object({
   message: 'Les mots de passe ne correspondent pas',
   path: ['confirmPassword'],
 });
+
+export const resetCodeSchema = z.object({
+  code: z
+    .string()
+    .min(1, 'Le code est requis')
+    .regex(/^\d{6}$/, 'Le code doit contenir 6 chiffres'),
+});
+
+export const newPasswordSchema = z
+  .object({
+    password: z
+      .string()
+      .min(1, 'Le mot de passe est requis')
+      .min(8, 'Le mot de passe doit contenir au moins 8 caractères')
+      .regex(passwordPattern, passwordMessage),
+    confirmPassword: z
+      .string()
+      .min(1, 'Confirmez votre mot de passe'),
+  })
+  .refine((data) => data.password === data.confirmPassword, {
+    message: 'Les mots de passe ne correspondent pas',
+    path: ['confirmPassword'],
+  });
 
 export const changePasswordSchema = z.object({
   currentPassword: z
@@ -84,10 +113,7 @@ export const changePasswordSchema = z.object({
     .string()
     .min(1, 'Le nouveau mot de passe est requis')
     .min(8, 'Le mot de passe doit contenir au moins 8 caractères')
-    .regex(
-      /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)/,
-      'Le mot de passe doit contenir au moins une majuscule, une minuscule et un chiffre'
-    ),
+    .regex(passwordPattern, passwordMessage),
   confirmNewPassword: z
     .string()
     .min(1, 'Confirmez le nouveau mot de passe'),

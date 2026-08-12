@@ -5,8 +5,8 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import toast from 'react-hot-toast';
 import { useNavigate } from 'react-router-dom';
 import { userCreateSchema, userUpdateSchema, userToFormValues } from '../../helpers/rbacValidation';
-import { mockAgenciesService } from '../../api/mockAgencies';
-import { mockRolesService } from '../../api/mockRoles';
+import { agenciesService } from '../../api/agenciesService';
+import { SYSTEM_ROLES } from '../../api/usersService';
 import { useAuth } from '../../hooks/useAuth';
 
 export default function UserForm({ initialData, isEdit = false, onSubmit }) {
@@ -22,10 +22,10 @@ export default function UserForm({ initialData, isEdit = false, onSubmit }) {
   });
 
   useEffect(() => {
-    Promise.all([
-      mockAgenciesService.getAll(companyId, { perPage: 100 }),
-      mockRolesService.getAll(companyId),
-    ]).then(([a, r]) => { setAgencies(a.data || []); setRoles(r); });
+    agenciesService.getAll(companyId, { perPage: 100 }).then((a) => {
+      setAgencies(a.data || []);
+      setRoles(SYSTEM_ROLES);
+    });
   }, [companyId]);
 
   useEffect(() => {

@@ -1,5 +1,5 @@
 import { create } from 'zustand';
-import { mockEmployeesService } from '../api/mockEmployees';
+import { employeesService } from '../api/employeesService';
 
 const useEmployeeStore = create((set, get) => ({
   employees: [],
@@ -22,7 +22,7 @@ const useEmployeeStore = create((set, get) => ({
     const { search, filters, sort, pagination } = get();
     set((s) => ({ loading: { ...s.loading, list: true }, error: null }));
     try {
-      const result = await mockEmployeesService.getAll(companyId, { search, filters, sort, page: pagination.page, perPage: pagination.perPage });
+      const result = await employeesService.getAll(companyId, { search, filters, sort, page: pagination.page, perPage: pagination.perPage });
       set({ employees: result.data, pagination: { page: result.page, perPage: result.perPage, total: result.total, totalPages: result.totalPages }, loading: { ...get().loading, list: false } });
     } catch (err) { set({ loading: { ...get().loading, list: false }, error: err.message }); }
   },
@@ -30,7 +30,7 @@ const useEmployeeStore = create((set, get) => ({
   fetchEmployeeDetail: async (companyId, employeeId) => {
     set((s) => ({ loading: { ...s.loading, detail: true }, error: null }));
     try {
-      const emp = await mockEmployeesService.getById(companyId, employeeId);
+      const emp = await employeesService.getById(companyId, employeeId);
       set({ selectedEmployee: emp, loading: { ...get().loading, detail: false } });
     } catch (err) { set({ loading: { ...get().loading, detail: false }, error: err.message }); }
   },
@@ -38,7 +38,7 @@ const useEmployeeStore = create((set, get) => ({
   fetchCounts: async (companyId) => {
     set((s) => ({ loading: { ...s.loading, counts: true } }));
     try {
-      const counts = await mockEmployeesService.getCount(companyId);
+      const counts = await employeesService.getCount(companyId);
       set({ counts, loading: { ...get().loading, counts: false } });
     } catch { set({ loading: { ...get().loading, counts: false } }); }
   },
@@ -46,7 +46,7 @@ const useEmployeeStore = create((set, get) => ({
   createEmployee: async (companyId, data) => {
     set((s) => ({ loading: { ...s.loading, create: true }, error: null }));
     try {
-      const emp = await mockEmployeesService.create(companyId, data);
+      const emp = await employeesService.create(companyId, data);
       set((s) => ({ employees: [emp, ...s.employees], loading: { ...s.loading, create: false } }));
       return emp;
     } catch (err) { set({ loading: { ...get().loading, create: false }, error: err.message }); throw err; }
@@ -55,7 +55,7 @@ const useEmployeeStore = create((set, get) => ({
   updateEmployee: async (companyId, employeeId, data) => {
     set((s) => ({ loading: { ...s.loading, update: true }, error: null }));
     try {
-      const emp = await mockEmployeesService.update(companyId, employeeId, data);
+      const emp = await employeesService.update(companyId, employeeId, data);
       set((s) => ({
         employees: s.employees.map((e) => e.id === employeeId ? emp : e),
         selectedEmployee: s.selectedEmployee?.id === employeeId ? emp : s.selectedEmployee,
@@ -68,7 +68,7 @@ const useEmployeeStore = create((set, get) => ({
   toggleEmployeeStatus: async (companyId, employeeId) => {
     set((s) => ({ loading: { ...s.loading, toggle: true } }));
     try {
-      const emp = await mockEmployeesService.toggleStatus(companyId, employeeId);
+      const emp = await employeesService.toggleStatus(companyId, employeeId);
       set((s) => ({
         employees: s.employees.map((e) => e.id === employeeId ? emp : e),
         selectedEmployee: s.selectedEmployee?.id === employeeId ? emp : s.selectedEmployee,

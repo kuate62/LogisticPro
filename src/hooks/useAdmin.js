@@ -17,7 +17,7 @@ export function useEnterprises() {
       list = list.filter((e) => e.status === filters.status);
     }
     if (filters.plan !== 'all') {
-      list = list.filter((e) => e.plan === filters.plan);
+      list = list.filter((e) => e.planId === filters.plan);
     }
     return list;
   }, [enterprises, search, filters]);

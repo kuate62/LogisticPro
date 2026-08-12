@@ -1,5 +1,5 @@
 import { create } from 'zustand';
-import { mockPaymentsService } from '../api/mockPayments';
+import { paymentsService } from '../api/paymentsService';
 import toast from 'react-hot-toast';
 
 const usePaymentStore = create((set, get) => ({
@@ -18,7 +18,7 @@ const usePaymentStore = create((set, get) => ({
     set({ loading: true, error: null });
     try {
       const state = get();
-      const result = await mockPaymentsService.getAll(companyId, {
+      const result = await paymentsService.getAll(companyId, {
         search: options.search ?? state.search,
         filters: options.filters ?? state.filters,
         sort: options.sort ?? state.sort,
@@ -37,7 +37,7 @@ const usePaymentStore = create((set, get) => ({
   fetchPaymentById: async (companyId, id) => {
     set({ loading: true, error: null });
     try {
-      const payment = await mockPaymentsService.getById(companyId, id);
+      const payment = await paymentsService.getById(companyId, id);
       set({ currentPayment: payment, loading: false });
       return payment;
     } catch (err) {
@@ -50,7 +50,7 @@ const usePaymentStore = create((set, get) => ({
   createPayment: async (companyId, data) => {
     set({ loading: true, error: null });
     try {
-      const created = await mockPaymentsService.create(companyId, data);
+      const created = await paymentsService.create(companyId, data);
       set({ payments: [...get().payments, created], loading: false });
       toast.success('Paiement enregistré');
       return created;
@@ -64,7 +64,7 @@ const usePaymentStore = create((set, get) => ({
   updatePayment: async (companyId, id, data) => {
     set({ loading: true, error: null });
     try {
-      const updated = await mockPaymentsService.update(companyId, id, data);
+      const updated = await paymentsService.update(companyId, id, data);
       const payments = get().payments.map((p) => (p.id === id ? updated : p));
       set({ payments, currentPayment: updated, loading: false });
       toast.success('Paiement mis à jour');
@@ -79,7 +79,7 @@ const usePaymentStore = create((set, get) => ({
   cancelPayment: async (companyId, id) => {
     set({ loading: true, error: null });
     try {
-      const cancelled = await mockPaymentsService.cancel(companyId, id);
+      const cancelled = await paymentsService.cancel(companyId, id);
       const payments = get().payments.map((p) => (p.id === id ? cancelled : p));
       set({ payments, currentPayment: cancelled, loading: false });
       toast.success('Paiement annulé');
@@ -93,7 +93,7 @@ const usePaymentStore = create((set, get) => ({
 
   fetchHistory: async (companyId, paymentId) => {
     try {
-      const history = await mockPaymentsService.getHistory(companyId, paymentId);
+      const history = await paymentsService.getHistory(companyId, paymentId);
       set({ paymentHistory: history });
       return history;
     } catch (err) {
@@ -104,7 +104,7 @@ const usePaymentStore = create((set, get) => ({
 
   fetchStatistics: async (companyId) => {
     try {
-      const statistics = await mockPaymentsService.getStatistics(companyId);
+      const statistics = await paymentsService.getStatistics(companyId);
       set({ statistics });
       return statistics;
     } catch (err) {

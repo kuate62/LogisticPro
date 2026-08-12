@@ -1,0 +1,117 @@
+/* ═══════════════════════════════════════════════
+   DASHBOARD FOOTER — shared (client + agent)
+   ═══════════════════════════════════════════════ */
+
+.dash-footer {
+  border-top: 1px solid var(--color-border);
+  background: var(--color-card);
+  padding: 40px 28px 0;
+}
+
+.dash-footer--minimal {
+  padding-top: 0;
+}
+
+.dash-footer__inner {
+  max-width: var(--content-max-width);
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: 1.6fr 1fr 1fr 1fr;
+  gap: 32px;
+  padding-bottom: 32px;
+}
+
+.dash-footer__brand {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 10px;
+}
+
+.dash-footer__logo {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.dash-footer__logo span {
+  font-size: 16px;
+  font-weight: var(--font-weight-bold);
+  color: var(--color-text-heading);
+}
+
+.dash-footer__desc {
+  font-size: var(--font-size-sm);
+  color: var(--color-text-muted);
+  line-height: 1.6;
+  max-width: 280px;
+}
+
+.dash-footer__col h4 {
+  font-size: var(--font-size-xs);
+  font-weight: var(--font-weight-semibold);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--color-text-heading);
+  margin-bottom: 12px;
+}
+
+.dash-footer__col a,
+.dash-footer__address {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: var(--font-size-sm);
+  color: var(--color-text-secondary);
+  margin-bottom: 8px;
+  text-decoration: none;
+}
+
+.dash-footer__col a:hover {
+  color: var(--color-primary);
+  text-decoration: none;
+}
+
+.dash-footer__bottom {
+  border-top: 1px solid var(--color-border);
+}
+
+.dash-footer__bottom-inner {
+  max-width: var(--content-max-width);
+  margin: 0 auto;
+  padding: 16px 0;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.dash-footer__bottom p {
+  font-size: var(--font-size-xs);
+  color: var(--color-text-muted);
+}
+
+/* A11Y */
+.dash-footer__col a:focus-visible {
+  outline: 2px solid var(--color-primary);
+  outline-offset: 2px;
+}
+
+/* RESPONSIVE */
+@media (max-width: 992px) {
+  .dash-footer__inner {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+
+@media (max-width: 640px) {
+  .dash-footer {
+    padding: 32px 16px 0;
+  }
+
+  .dash-footer__inner {
+    grid-template-columns: 1fr;
+    gap: 24px;
+  }
+}

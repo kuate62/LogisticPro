@@ -1,5 +1,5 @@
 import { create } from 'zustand';
-import { mockPackagesService } from '../api/mockPackages';
+import { packagesService } from '../api/packagesService';
 
 const usePackageStore = create((set, get) => ({
   packages: [],
@@ -25,7 +25,7 @@ const usePackageStore = create((set, get) => ({
     const { search, filters, sort, pagination } = get();
     set((s) => ({ loading: { ...s.loading, list: true }, error: null }));
     try {
-      const result = await mockPackagesService.getAll(companyId, { search, filters, sort, page: pagination.page, perPage: pagination.perPage });
+      const result = await packagesService.getAll(companyId, { search, filters, sort, page: pagination.page, perPage: pagination.perPage });
       set({ packages: result.data, pagination: { page: result.page, perPage: result.perPage, total: result.total, totalPages: result.totalPages }, loading: { ...get().loading, list: false } });
     } catch (err) { set({ loading: { ...get().loading, list: false }, error: err.message }); }
   },
@@ -33,7 +33,7 @@ const usePackageStore = create((set, get) => ({
   fetchPackageDetail: async (companyId, packageId) => {
     set((s) => ({ loading: { ...s.loading, detail: true }, error: null }));
     try {
-      const pkg = await mockPackagesService.getById(companyId, packageId);
+      const pkg = await packagesService.getById(companyId, packageId);
       set({ selectedPackage: pkg, loading: { ...get().loading, detail: false } });
     } catch (err) { set({ loading: { ...get().loading, detail: false }, error: err.message }); }
   },
@@ -41,7 +41,7 @@ const usePackageStore = create((set, get) => ({
   fetchHistory: async (companyId, packageId) => {
     set((s) => ({ loading: { ...s.loading, history: true } }));
     try {
-      const history = await mockPackagesService.getHistory(companyId, packageId);
+      const history = await packagesService.getHistory(companyId, packageId);
       set({ history, loading: { ...get().loading, history: false } });
     } catch { set({ loading: { ...get().loading, history: false } }); }
   },
@@ -49,7 +49,7 @@ const usePackageStore = create((set, get) => ({
   fetchPayments: async (companyId, packageId) => {
     set((s) => ({ loading: { ...s.loading, payments: true } }));
     try {
-      const payments = await mockPackagesService.getPayments(companyId, packageId);
+      const payments = await packagesService.getPayments(companyId, packageId);
       set({ payments, loading: { ...get().loading, payments: false } });
     } catch { set({ loading: { ...get().loading, payments: false } }); }
   },
@@ -57,7 +57,7 @@ const usePackageStore = create((set, get) => ({
   fetchInvoices: async (companyId, packageId) => {
     set((s) => ({ loading: { ...s.loading, invoices: true } }));
     try {
-      const invoices = await mockPackagesService.getInvoices(companyId, packageId);
+      const invoices = await packagesService.getInvoices(companyId, packageId);
       set({ invoices, loading: { ...get().loading, invoices: false } });
     } catch { set({ loading: { ...get().loading, invoices: false } }); }
   },
@@ -65,7 +65,7 @@ const usePackageStore = create((set, get) => ({
   fetchStatistics: async (companyId) => {
     set((s) => ({ loading: { ...s.loading, stats: true } }));
     try {
-      const statistics = await mockPackagesService.getStatistics(companyId);
+      const statistics = await packagesService.getStatistics(companyId);
       set({ statistics, loading: { ...get().loading, stats: false } });
     } catch { set({ loading: { ...get().loading, stats: false } }); }
   },
@@ -73,7 +73,7 @@ const usePackageStore = create((set, get) => ({
   createPackage: async (companyId, data) => {
     set((s) => ({ loading: { ...s.loading, create: true }, error: null }));
     try {
-      const pkg = await mockPackagesService.create(companyId, data);
+      const pkg = await packagesService.create(companyId, data);
       set((s) => ({ packages: [pkg, ...s.packages], loading: { ...s.loading, create: false } }));
       return pkg;
     } catch (err) { set({ loading: { ...get().loading, create: false }, error: err.message }); throw err; }
@@ -82,7 +82,7 @@ const usePackageStore = create((set, get) => ({
   updatePackageStatus: async (companyId, packageId, newStatus) => {
     set((s) => ({ loading: { ...s.loading, update: true }, error: null }));
     try {
-      const pkg = await mockPackagesService.updateStatus(companyId, packageId, newStatus);
+      const pkg = await packagesService.updateStatus(companyId, packageId, newStatus);
       set((s) => ({
         packages: s.packages.map((p) => p.id === packageId ? pkg : p),
         selectedPackage: s.selectedPackage?.id === packageId ? pkg : s.selectedPackage,
@@ -95,7 +95,7 @@ const usePackageStore = create((set, get) => ({
   cancelPackage: async (companyId, packageId) => {
     set((s) => ({ loading: { ...s.loading, cancel: true } }));
     try {
-      const pkg = await mockPackagesService.cancel(companyId, packageId);
+      const pkg = await packagesService.cancel(companyId, packageId);
       set((s) => ({
         packages: s.packages.map((p) => p.id === packageId ? pkg : p),
         selectedPackage: s.selectedPackage?.id === packageId ? pkg : s.selectedPackage,

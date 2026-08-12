@@ -145,6 +145,18 @@
   color: #991B1B;
 }
 
+.sa-dashboard__card-link {
+  font-size: var(--font-size-sm, 14px);
+  font-weight: 500;
+  color: var(--color-primary, #2563eb);
+  text-decoration: none;
+  white-space: nowrap;
+}
+
+.sa-dashboard__card-link:hover {
+  text-decoration: underline;
+}
+
 @media (max-width: 1024px) {
   .sa-dashboard__kpi-grid {
     grid-template-columns: repeat(2, 1fr);

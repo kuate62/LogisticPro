@@ -5,7 +5,7 @@ import toast from 'react-hot-toast';
 import { usePackage, usePackageForm } from '../../hooks/usePackages';
 import PackageStatus from '../../components/packages/PackageStatus';
 import PackageTimeline from '../../components/packages/PackageTimeline';
-import { PACKAGE_METHOD_LABELS } from '../../api/mockPackages';
+import { PACKAGE_METHOD_LABELS } from '../../config/constants';
 
 const TABS = [
   { key: 'info', label: 'Informations' },

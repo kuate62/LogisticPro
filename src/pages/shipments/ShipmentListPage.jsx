@@ -1,6 +1,6 @@
 import { useState, useCallback } from 'react';
 import toast from 'react-hot-toast';
-import { useShipments, useShipmentForm } from '../../hooks/useShipment';
+import { useShipments, useShipmentForm, useShipmentStatistics } from '../../hooks/useShipment';
 import ShipmentHeader from '../../components/shipments/ShipmentHeader';
 import ShipmentTable from '../../components/shipments/ShipmentTable';
 import ShipmentCard from '../../components/shipments/ShipmentCard';
@@ -11,6 +11,7 @@ import PaginationBar from '../../components/rbac/PaginationBar';
 export default function ShipmentListPage() {
   const { shipments, loading, error, search, filters, sort, pagination, setSearch, setFilters, resetFilters, setSort, setPage, refresh } = useShipments();
   const { cancel } = useShipmentForm();
+  const { statistics, loading: statsLoading } = useShipmentStatistics();
   const [view, setView] = useState('table');
 
   const handleCancel = useCallback(async (id) => {
@@ -24,7 +25,7 @@ export default function ShipmentListPage() {
       <ShipmentHeader search={search} onSearch={setSearch} filters={filters} onFilterChange={setFilters} onFilterReset={resetFilters} view={view} onViewChange={setView} total={pagination.total} />
 
       <div className="mb-4">
-        <ShipmentStatistics statistics={null} loading={loading.stats} />
+        <ShipmentStatistics statistics={statistics} loading={statsLoading} />
       </div>
 
       {loading.list ? <ShipmentSkeleton /> : error ? (

@@ -3,6 +3,7 @@ import { ArrowLeft, Edit, XCircle, Archive, Package, Truck } from 'lucide-react'
 import { Link, useParams } from 'react-router-dom';
 import toast from 'react-hot-toast';
 import { useShipment, useShipmentForm } from '../../hooks/useShipment';
+import { SHIPMENT_STATUS_FLOW, SHIPMENT_STATUS_LABELS } from '../../config/constants';
 import ShipmentSkeleton from '../../components/clients/ClientSkeleton';
 import ShipmentStatus from '../../components/shipments/ShipmentStatus';
 import ShipmentWeightIndicator from '../../components/shipments/ShipmentWeightIndicator';
@@ -18,11 +19,17 @@ const TABS = [
 export default function ShipmentDetailPage() {
   const { id } = useParams();
   const { shipment, loading, history, fetch, fetchHistory, clearSelected } = useShipment();
-  const { cancel, archive } = useShipmentForm();
+  const { cancel, archive, updateStatus } = useShipmentForm();
   const [activeTab, setActiveTab] = useState('info');
+  const [nextStatus, setNextStatus] = useState('');
 
   useEffect(() => { fetch(id); return () => clearSelected(); }, [id, fetch, clearSelected]);
   useEffect(() => { if (activeTab === 'history') fetchHistory(id); }, [activeTab, id, fetchHistory]);
+
+  const canChangeStatus = !['cancelled', 'delivered'].includes(shipment?.status);
+  const currentIdx = shipment ? SHIPMENT_STATUS_FLOW.indexOf(shipment.status) : -1;
+  const flowOptions = currentIdx >= 0 ? SHIPMENT_STATUS_FLOW.slice(currentIdx) : [];
+  const effectiveNextStatus = flowOptions.includes(nextStatus) ? nextStatus : (flowOptions[0] || '');
 
   if (loading.detail || !shipment) return <ShipmentSkeleton />;
 
@@ -35,6 +42,13 @@ export default function ShipmentDetailPage() {
   const handleArchive = async () => {
     if (window.confirm('Archiver cette expédition ?')) {
       try { await archive(id); toast.success('Expédition archivée'); fetch(id); } catch { toast.error('Erreur'); }
+    }
+  };
+
+  const handleStatusChange = async () => {
+    if (!effectiveNextStatus || effectiveNextStatus === shipment.status) return;
+    if (window.confirm(`Passer cette expédition au statut « ${SHIPMENT_STATUS_LABELS[effectiveNextStatus] || effectiveNextStatus} » ?`)) {
+      try { await updateStatus(id, effectiveNextStatus); toast.success('Statut mis à jour'); fetch(id); } catch { toast.error('Erreur'); }
     }
   };
 
@@ -51,7 +65,17 @@ export default function ShipmentDetailPage() {
             <span className="text-muted small">{new Date(shipment.createdAt).toLocaleString('fr-FR')}</span>
           </div>
         </div>
-        <div className="d-flex gap-2">
+        <div className="d-flex gap-2 align-items-center">
+          {canChangeStatus && flowOptions.length > 1 && (
+            <div className="d-flex align-items-center gap-2">
+              <select className="form-select form-select-sm" value={effectiveNextStatus} onChange={(e) => setNextStatus(e.target.value)}>
+                {flowOptions.map((s) => <option key={s} value={s}>{SHIPMENT_STATUS_LABELS[s] || s}</option>)}
+              </select>
+              <button type="button" className="btn btn-primary btn-sm" onClick={handleStatusChange} disabled={loading.status || effectiveNextStatus === shipment.status}>
+                {loading.status ? 'Mise à jour...' : 'Mettre à jour'}
+              </button>
+            </div>
+          )}
           {['draft', 'pending'].includes(shipment.status) && (
             <>
               <Link to={`/shipments/${id}/edit`} className="btn btn-outline-primary btn-sm d-flex align-items-center gap-1"><Edit size={14} /> Modifier</Link>

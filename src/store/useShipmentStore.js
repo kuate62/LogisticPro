@@ -1,5 +1,5 @@
 import { create } from 'zustand';
-import { mockShipmentsService } from '../api/mockShipments';
+import { shipmentsService } from '../api/shipmentsService';
 
 const initialWizard = {
   step: 1,
@@ -18,7 +18,7 @@ const useShipmentStore = create((set, get) => ({
   history: [],
   statistics: null,
   wizard: { ...initialWizard },
-  loading: { list: false, detail: false, create: false, update: false, cancel: false, archive: false, history: false, stats: false },
+  loading: { list: false, detail: false, create: false, update: false, cancel: false, archive: false, history: false, stats: false, status: false },
   error: null,
   search: '',
   filters: { status: '', originAgencyId: '', destinationAgencyId: '', routeId: '', agentId: '', dateFrom: '', dateTo: '' },
@@ -35,11 +35,11 @@ const useShipmentStore = create((set, get) => ({
   setWizardStep: (step) => set((s) => ({ wizard: { ...s.wizard, step } })),
   resetWizard: () => set({ wizard: { ...initialWizard } }),
   addWizardPackage: (pkg) => set((s) => {
-    const calc = mockShipmentsService.calculatePackage(pkg);
+    const calc = shipmentsService.calculatePackage(pkg);
     return { wizard: { ...s.wizard, packages: [...s.wizard.packages, calc] } };
   }),
   updateWizardPackage: (index, pkg) => set((s) => {
-    const calc = mockShipmentsService.calculatePackage(pkg);
+    const calc = shipmentsService.calculatePackage(pkg);
     const pkgs = [...s.wizard.packages];
     pkgs[index] = calc;
     return { wizard: { ...s.wizard, packages: pkgs } };
@@ -66,7 +66,7 @@ const useShipmentStore = create((set, get) => ({
     const { search, filters, sort, pagination } = get();
     set((s) => ({ loading: { ...s.loading, list: true }, error: null }));
     try {
-      const result = await mockShipmentsService.getAll(companyId, { search, filters, sort, page: pagination.page, perPage: pagination.perPage });
+      const result = await shipmentsService.getAll(companyId, { search, filters, sort, page: pagination.page, perPage: pagination.perPage });
       set({ shipments: result.data, pagination: { page: result.page, perPage: result.perPage, total: result.total, totalPages: result.totalPages }, loading: { ...get().loading, list: false } });
     } catch (err) { set({ loading: { ...get().loading, list: false }, error: err.message }); }
   },
@@ -74,7 +74,7 @@ const useShipmentStore = create((set, get) => ({
   fetchShipmentDetail: async (companyId, shipmentId) => {
     set((s) => ({ loading: { ...s.loading, detail: true }, error: null }));
     try {
-      const shipment = await mockShipmentsService.getById(companyId, shipmentId);
+      const shipment = await shipmentsService.getById(companyId, shipmentId);
       set({ selectedShipment: shipment, loading: { ...get().loading, detail: false } });
     } catch (err) { set({ loading: { ...get().loading, detail: false }, error: err.message }); }
   },
@@ -82,7 +82,7 @@ const useShipmentStore = create((set, get) => ({
   fetchHistory: async (companyId, shipmentId) => {
     set((s) => ({ loading: { ...s.loading, history: true } }));
     try {
-      const history = await mockShipmentsService.getHistory(companyId, shipmentId);
+      const history = await shipmentsService.getHistory(companyId, shipmentId);
       set({ history, loading: { ...get().loading, history: false } });
     } catch { set({ loading: { ...get().loading, history: false } }); }
   },
@@ -90,7 +90,7 @@ const useShipmentStore = create((set, get) => ({
   fetchStatistics: async (companyId) => {
     set((s) => ({ loading: { ...s.loading, stats: true } }));
     try {
-      const statistics = await mockShipmentsService.getStatistics(companyId);
+      const statistics = await shipmentsService.getStatistics(companyId);
       set({ statistics, loading: { ...get().loading, stats: false } });
     } catch { set({ loading: { ...get().loading, stats: false } }); }
   },
@@ -98,7 +98,7 @@ const useShipmentStore = create((set, get) => ({
   createShipment: async (companyId, data) => {
     set((s) => ({ loading: { ...s.loading, create: true }, error: null }));
     try {
-      const shipment = await mockShipmentsService.create(companyId, data);
+      const shipment = await shipmentsService.create(companyId, data);
       set((s) => ({ shipments: [shipment, ...s.shipments], loading: { ...s.loading, create: false } }));
       return shipment;
     } catch (err) { set({ loading: { ...get().loading, create: false }, error: err.message }); throw err; }
@@ -107,7 +107,7 @@ const useShipmentStore = create((set, get) => ({
   updateShipment: async (companyId, shipmentId, data) => {
     set((s) => ({ loading: { ...s.loading, update: true }, error: null }));
     try {
-      const shipment = await mockShipmentsService.update(companyId, shipmentId, data);
+      const shipment = await shipmentsService.update(companyId, shipmentId, data);
       set((s) => ({
         shipments: s.shipments.map((sh) => sh.id === shipmentId ? shipment : sh),
         selectedShipment: s.selectedShipment?.id === shipmentId ? shipment : s.selectedShipment,
@@ -120,7 +120,7 @@ const useShipmentStore = create((set, get) => ({
   cancelShipment: async (companyId, shipmentId) => {
     set((s) => ({ loading: { ...s.loading, cancel: true } }));
     try {
-      const shipment = await mockShipmentsService.cancel(companyId, shipmentId);
+      const shipment = await shipmentsService.cancel(companyId, shipmentId);
       set((s) => ({
         shipments: s.shipments.map((sh) => sh.id === shipmentId ? shipment : sh),
         selectedShipment: s.selectedShipment?.id === shipmentId ? shipment : s.selectedShipment,
@@ -130,10 +130,23 @@ const useShipmentStore = create((set, get) => ({
     } catch (err) { set({ loading: { ...get().loading, cancel: false } }); throw err; }
   },
 
+  updateShipmentStatus: async (companyId, shipmentId, status) => {
+    set((s) => ({ loading: { ...s.loading, status: true }, error: null }));
+    try {
+      const shipment = await shipmentsService.updateStatus(companyId, shipmentId, status);
+      set((s) => ({
+        shipments: s.shipments.map((sh) => sh.id === shipmentId ? shipment : sh),
+        selectedShipment: s.selectedShipment?.id === shipmentId ? shipment : s.selectedShipment,
+        loading: { ...s.loading, status: false },
+      }));
+      return shipment;
+    } catch (err) { set({ loading: { ...get().loading, status: false }, error: err.message }); throw err; }
+  },
+
   archiveShipment: async (companyId, shipmentId) => {
     set((s) => ({ loading: { ...s.loading, archive: true } }));
     try {
-      const shipment = await mockShipmentsService.archive(companyId, shipmentId);
+      const shipment = await shipmentsService.archive(companyId, shipmentId);
       set((s) => ({
         shipments: s.shipments.map((sh) => sh.id === shipmentId ? shipment : sh),
         loading: { ...s.loading, archive: false },

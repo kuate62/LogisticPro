@@ -32,13 +32,14 @@ export function useShipment() {
 
 export function useShipmentForm() {
   const { companyId } = useAuth();
-  const { createShipment, updateShipment, cancelShipment, archiveShipment } = useShipmentStore();
+  const { createShipment, updateShipment, cancelShipment, archiveShipment, updateShipmentStatus } = useShipmentStore();
 
   return {
     create: useCallback((data) => createShipment(companyId, data), [companyId, createShipment]),
     update: useCallback((id, data) => updateShipment(companyId, id, data), [companyId, updateShipment]),
     cancel: useCallback((id) => cancelShipment(companyId, id), [companyId, cancelShipment]),
     archive: useCallback((id) => archiveShipment(companyId, id), [companyId, archiveShipment]),
+    updateStatus: useCallback((id, status) => updateShipmentStatus(companyId, id, status), [companyId, updateShipmentStatus]),
   };
 }
 

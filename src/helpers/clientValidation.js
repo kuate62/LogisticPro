@@ -40,7 +40,7 @@ export function clientToFormValues(client) {
     email: client.email || '', address: client.address || '',
     neighborhood: client.neighborhood || '', city: client.city || '',
     region: client.region || '', country: client.country || 'Cameroun',
-    agencyId: client.agencyId || '', observation: client.observation || '',
+    agencyId: client.preferredAgencyId || client.agencyId || '', observation: client.observation || '',
     tags: client.tags || [],
   };
 }

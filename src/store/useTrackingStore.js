@@ -1,5 +1,5 @@
 import { create } from 'zustand';
-import { mockTrackingService } from '../api/mockTracking';
+import { trackingService } from '../api/trackingService';
 import toast from 'react-hot-toast';
 
 const useTrackingStore = create((set, get) => ({
@@ -16,7 +16,7 @@ const useTrackingStore = create((set, get) => ({
     set({ loading: true, error: null });
     try {
       const state = get();
-      const result = await mockTrackingService.getAll(companyId, {
+      const result = await trackingService.getAll(companyId, {
         search: options.search ?? state.search,
         filters: options.filters ?? state.filters,
         sort: options.sort ?? state.sort,
@@ -35,7 +35,7 @@ const useTrackingStore = create((set, get) => ({
   fetchTrackingByNumber: async (companyId, trackingNumber) => {
     set({ loading: true, error: null });
     try {
-      const tracking = await mockTrackingService.getByNumber(companyId, trackingNumber);
+      const tracking = await trackingService.getByNumber(companyId, trackingNumber);
       set({ currentTracking: tracking, loading: false });
       return tracking;
     } catch (err) {
@@ -48,7 +48,7 @@ const useTrackingStore = create((set, get) => ({
   fetchTrackingById: async (companyId, id) => {
     set({ loading: true, error: null });
     try {
-      const tracking = await mockTrackingService.getById(companyId, id);
+      const tracking = await trackingService.getById(companyId, id);
       set({ currentTracking: tracking, loading: false });
       return tracking;
     } catch (err) {
@@ -61,7 +61,7 @@ const useTrackingStore = create((set, get) => ({
   updateStatus: async (companyId, id, data) => {
     set({ loading: true, error: null });
     try {
-      const updated = await mockTrackingService.updateStatus(companyId, id, data);
+      const updated = await trackingService.updateStatus(companyId, id, data);
       const trackings = get().trackings.map((t) => (t.id === id ? updated : t));
       set({ trackings, currentTracking: updated, loading: false });
       toast.success('Statut mis à jour');

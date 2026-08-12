@@ -97,12 +97,12 @@ export default function SubscriptionsPage() {
               {filtered.map((sub) => (
                 <tr key={sub.id}>
                   <td className="sa-table__cell-primary">{sub.companyName || sub.companyId}</td>
-                  <td>{sub.planId}</td>
+                  <td>{sub.planLabel || sub.planId}</td>
                   <td><StatusBadge status={sub.status} /></td>
                   <td>{formatDate(sub.startDate)}</td>
                   <td>{formatDate(sub.endDate)}</td>
                   <td className="sa-table__cell-amount">{formatAmount(sub.amount)}</td>
-                  <td>{PAYMENT_LABELS[sub.paymentMethod] || sub.paymentMethod}</td>
+                  <td>{PAYMENT_LABELS[sub.paymentMethod] || sub.paymentMethod || '—'}</td>
                   <td>
                     <div className="sa-table__actions">
                       {sub.status === 'suspended' && (

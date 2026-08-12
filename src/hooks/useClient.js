@@ -1,5 +1,5 @@
 import { useEffect, useCallback } from 'react';
-import useClientStore from '../store/useClientStore';
+import useClientsStore from '../store/useClientsStore';
 import { useAuth } from './useAuth';
 
 export function useClients() {
@@ -7,7 +7,7 @@ export function useClients() {
   const {
     clients, counts, loading, error, search, filters, sort, pagination,
     fetchClients, fetchCounts, setSearch, setFilters, resetFilters, setSort, setPage,
-  } = useClientStore();
+  } = useClientsStore();
 
   useEffect(() => { if (companyId) fetchClients(companyId); }, [companyId, search, filters, sort, pagination.page, pagination.perPage, fetchClients]);
   useEffect(() => { if (companyId) fetchCounts(companyId); }, [companyId, fetchCounts]);
@@ -24,7 +24,7 @@ export function useClient() {
   const {
     selectedClient, history, documents, photos, loading, error,
     fetchClientDetail, fetchHistory, fetchDocuments, fetchPhotos, clearSelected,
-  } = useClientStore();
+  } = useClientsStore();
 
   return {
     client: selectedClient, history, documents, photos, loading, error,
@@ -38,7 +38,7 @@ export function useClient() {
 
 export function useClientForm() {
   const { companyId } = useAuth();
-  const { createClient, updateClient, archiveClient, activateClient, deactivateClient, blockClient } = useClientStore();
+  const { createClient, updateClient, archiveClient, activateClient, deactivateClient, blockClient } = useClientsStore();
 
   return {
     create: useCallback((data) => createClient(companyId, data), [companyId, createClient]),
@@ -52,7 +52,7 @@ export function useClientForm() {
 
 export function useClientStatistics() {
   const { companyId } = useAuth();
-  const { statistics, loading, fetchStatistics } = useClientStore();
+  const { statistics, loading, fetchStatistics } = useClientsStore();
 
   useEffect(() => { if (companyId) fetchStatistics(companyId); }, [companyId, fetchStatistics]);
 

@@ -30,7 +30,7 @@ export default function EmployeeTable({ employees, sort, onSort, onToggle }) {
             <tr key={emp.id}>
               <td>
                 <div className="d-flex align-items-center gap-3">
-                  <Avatar firstName={emp.firstName} lastName={emp.lastName} size={36} />
+                  <Avatar firstName={emp.firstName} lastName={emp.lastName} size={36} src={emp.avatar} />
                   <div>
                     <div className="fw-medium">{emp.firstName} {emp.lastName}</div>
                     <div className="text-muted small">{emp.email}</div>

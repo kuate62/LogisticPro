@@ -1,5 +1,5 @@
 import { create } from 'zustand';
-import { mockAgenciesService } from '../api/mockAgencies';
+import { agenciesService } from '../api/agenciesService';
 
 const useAgencyStore = create((set, get) => ({
   agencies: [],
@@ -57,7 +57,7 @@ const useAgencyStore = create((set, get) => ({
     const { search, filters, sort, pagination } = get();
     set((s) => ({ loading: { ...s.loading, list: true }, error: null }));
     try {
-      const result = await mockAgenciesService.getAll(companyId, {
+      const result = await agenciesService.getAll(companyId, {
         search,
         filters,
         sort,
@@ -77,7 +77,7 @@ const useAgencyStore = create((set, get) => ({
   fetchAgencyDetail: async (companyId, agencyId) => {
     set((s) => ({ loading: { ...s.loading, detail: true }, error: null }));
     try {
-      const agency = await mockAgenciesService.getById(companyId, agencyId);
+      const agency = await agenciesService.getById(companyId, agencyId);
       set({ selectedAgency: agency, loading: { ...get().loading, detail: false } });
     } catch (err) {
       set({ loading: { ...get().loading, detail: false }, error: err.message });
@@ -87,7 +87,7 @@ const useAgencyStore = create((set, get) => ({
   fetchAgencyStats: async (companyId, agencyId) => {
     set((s) => ({ loading: { ...s.loading, stats: true } }));
     try {
-      const stats = await mockAgenciesService.getStatistics(companyId, agencyId);
+      const stats = await agenciesService.getStatistics(companyId, agencyId);
       set({ agencyStats: stats, loading: { ...get().loading, stats: false } });
     } catch (err) {
       set({ loading: { ...get().loading, stats: false }, error: err.message });
@@ -97,7 +97,7 @@ const useAgencyStore = create((set, get) => ({
   fetchAgencyEmployees: async (companyId, agencyId) => {
     set((s) => ({ loading: { ...s.loading, employees: true } }));
     try {
-      const employees = await mockAgenciesService.getEmployees(companyId, agencyId);
+      const employees = await agenciesService.getEmployees(companyId, agencyId);
       set({ agencyEmployees: employees, loading: { ...get().loading, employees: false } });
     } catch (err) {
       set({ loading: { ...get().loading, employees: false }, error: err.message });
@@ -107,7 +107,7 @@ const useAgencyStore = create((set, get) => ({
   fetchAgencyShipments: async (companyId, agencyId) => {
     set((s) => ({ loading: { ...s.loading, shipments: true } }));
     try {
-      const shipments = await mockAgenciesService.getShipments(companyId, agencyId);
+      const shipments = await agenciesService.getShipments(companyId, agencyId);
       set({ agencyShipments: shipments, loading: { ...get().loading, shipments: false } });
     } catch (err) {
       set({ loading: { ...get().loading, shipments: false }, error: err.message });
@@ -117,7 +117,7 @@ const useAgencyStore = create((set, get) => ({
   fetchAgencyHistory: async (companyId, agencyId) => {
     set((s) => ({ loading: { ...s.loading, history: true } }));
     try {
-      const history = await mockAgenciesService.getHistory(companyId, agencyId);
+      const history = await agenciesService.getHistory(companyId, agencyId);
       set({ agencyHistory: history, loading: { ...get().loading, history: false } });
     } catch (err) {
       set({ loading: { ...get().loading, history: false }, error: err.message });
@@ -127,7 +127,7 @@ const useAgencyStore = create((set, get) => ({
   fetchAgencyDocuments: async (companyId, agencyId) => {
     set((s) => ({ loading: { ...s.loading, documents: true } }));
     try {
-      const documents = await mockAgenciesService.getDocuments(companyId, agencyId);
+      const documents = await agenciesService.getDocuments(companyId, agencyId);
       set({ agencyDocuments: documents, loading: { ...get().loading, documents: false } });
     } catch (err) {
       set({ loading: { ...get().loading, documents: false }, error: err.message });
@@ -137,7 +137,7 @@ const useAgencyStore = create((set, get) => ({
   fetchCounts: async (companyId) => {
     set((s) => ({ loading: { ...s.loading, counts: true } }));
     try {
-      const counts = await mockAgenciesService.getCount(companyId);
+      const counts = await agenciesService.getCount(companyId);
       set({ counts, loading: { ...get().loading, counts: false } });
     } catch (err) {
       set({ loading: { ...get().loading, counts: false }, error: err.message });
@@ -147,7 +147,7 @@ const useAgencyStore = create((set, get) => ({
   fetchCities: async (companyId) => {
     set((s) => ({ loading: { ...s.loading, cities: true } }));
     try {
-      const cities = await mockAgenciesService.getAllCities(companyId);
+      const cities = await agenciesService.getAllCities(companyId);
       set({ cities, loading: { ...get().loading, cities: false } });
     } catch (err) {
       set({ loading: { ...get().loading, cities: false }, error: err.message });
@@ -157,7 +157,7 @@ const useAgencyStore = create((set, get) => ({
   fetchRegions: async (companyId) => {
     set((s) => ({ loading: { ...s.loading, regions: true } }));
     try {
-      const regions = await mockAgenciesService.getAllRegions(companyId);
+      const regions = await agenciesService.getAllRegions(companyId);
       set({ regions, loading: { ...get().loading, regions: false } });
     } catch (err) {
       set({ loading: { ...get().loading, regions: false }, error: err.message });
@@ -167,7 +167,7 @@ const useAgencyStore = create((set, get) => ({
   createAgency: async (companyId, data) => {
     set((s) => ({ loading: { ...s.loading, create: true }, error: null }));
     try {
-      const agency = await mockAgenciesService.create(companyId, data);
+      const agency = await agenciesService.create(companyId, data);
       set((s) => ({
         agencies: [agency, ...s.agencies],
         loading: { ...s.loading, create: false },
@@ -182,7 +182,7 @@ const useAgencyStore = create((set, get) => ({
   updateAgency: async (companyId, agencyId, data) => {
     set((s) => ({ loading: { ...s.loading, update: true }, error: null }));
     try {
-      const agency = await mockAgenciesService.update(companyId, agencyId, data);
+      const agency = await agenciesService.update(companyId, agencyId, data);
       set((s) => ({
         agencies: s.agencies.map((a) => (a.id === agencyId ? agency : a)),
         selectedAgency: s.selectedAgency?.id === agencyId ? agency : s.selectedAgency,
@@ -198,7 +198,7 @@ const useAgencyStore = create((set, get) => ({
   toggleAgencyStatus: async (companyId, agencyId) => {
     set((s) => ({ loading: { ...s.loading, toggle: true }, error: null }));
     try {
-      const agency = await mockAgenciesService.toggleStatus(companyId, agencyId);
+      const agency = await agenciesService.toggleStatus(companyId, agencyId);
       set((s) => ({
         agencies: s.agencies.map((a) => (a.id === agencyId ? agency : a)),
         selectedAgency: s.selectedAgency?.id === agencyId ? agency : s.selectedAgency,

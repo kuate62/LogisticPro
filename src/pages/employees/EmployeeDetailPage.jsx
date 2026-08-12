@@ -1,17 +1,20 @@
-import { useEffect } from 'react';
-import { ArrowLeft, Mail, Phone, MapPin, Calendar, Briefcase, Shield } from 'lucide-react';
+import { useEffect, useRef, useState } from 'react';
+import { ArrowLeft, Mail, Phone, MapPin, Calendar, Briefcase, Shield, Camera } from 'lucide-react';
 import { Link, useParams } from 'react-router-dom';
 import { useEmployee, useEmployeeForm } from '../../hooks/useEmployee';
 import ListSkeleton from '../../components/rbac/ListSkeleton';
 import StatusBadge from '../../components/rbac/StatusBadge';
 import Avatar from '../../components/rbac/Avatar';
 import { EMPLOYEE_POSITIONS } from '../../config/constants';
+import { employeesService } from '../../api/employeesService';
 import toast from 'react-hot-toast';
 
 export default function EmployeeDetailPage() {
   const { id } = useParams();
   const { employee, loading, fetch, clearSelected } = useEmployee();
   const { update } = useEmployeeForm();
+  const fileInputRef = useRef(null);
+  const [uploading, setUploading] = useState(false);
 
   useEffect(() => { fetch(id); return () => clearSelected(); }, [id, fetch, clearSelected]);
 
@@ -24,6 +27,18 @@ export default function EmployeeDetailPage() {
       toast.success(`Employé ${newStatus === 'active' ? 'activé' : 'désactivé'}`);
       fetch(id);
     } catch { toast.error('Erreur'); }
+  };
+
+  const handleAvatarChange = async (e) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+    setUploading(true);
+    try {
+      await employeesService.uploadAvatar(null, id, file);
+      toast.success('Photo mise à jour');
+      fetch(id);
+    } catch (err) { toast.error(err.response?.data?.message || 'Erreur lors de l\'upload'); }
+    finally { setUploading(false); }
   };
 
   return (
@@ -48,9 +63,21 @@ export default function EmployeeDetailPage() {
             <h6 className="fw-semibold mb-3">Informations personnelles</h6>
             <div className="row g-3">
               <div className="col-md-6 d-flex align-items-center gap-3">
-                <Avatar firstName={employee.firstName} lastName={employee.lastName} size={56} />
+                <div className="position-relative">
+                  <Avatar firstName={employee.firstName} lastName={employee.lastName} size={56} src={employee.avatar} />
+                  <button
+                    type="button"
+                    className="position-absolute rounded-circle border-0 text-white d-inline-flex align-items-center justify-content-center"
+                    style={{ bottom: -2, right: -2, width: 22, height: 22, background: 'var(--color-primary)' }}
+                    onClick={() => fileInputRef.current?.click()}
+                    aria-label="Changer la photo"
+                  >
+                    <Camera size={12} />
+                  </button>
+                  <input ref={fileInputRef} type="file" accept="image/*" hidden onChange={handleAvatarChange} />
+                </div>
                 <div>
-                  <div className="fw-medium">{employee.firstName} {employee.lastName}</div>
+                  <div className="fw-medium">{employee.firstName} {employee.lastName} {uploading && <small className="text-muted">(upload...)</small>}</div>
                   <div className="text-muted small">{employee.gender === 'male' ? 'Masculin' : 'Féminin'}</div>
                 </div>
               </div>

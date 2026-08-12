@@ -1,6 +1,7 @@
 import { Navigate, useLocation } from 'react-router-dom';
 import { useAuth } from '../../hooks/useAuth';
 import { AUTH_STATUS, ROLES } from '../../config/constants';
+import { getHomePath } from '../../utils/homePath';
 
 export function ProtectedRoute({ children, allowedRoles }) {
   const { user, status } = useAuth();
@@ -23,7 +24,7 @@ export function ProtectedRoute({ children, allowedRoles }) {
   }
 
   if (allowedRoles && !allowedRoles.includes(user.role)) {
-    return <Navigate to={user.role === ROLES.SUPER_ADMIN ? '/admin' : '/dashboard'} replace />;
+    return <Navigate to={getHomePath(user)} replace />;
   }
 
   return children;

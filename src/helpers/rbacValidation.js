@@ -1,6 +1,6 @@
 import { z } from 'zod';
 
-export const employeeCreateSchema = z.object({
+const employeeBaseSchema = z.object({
   firstName: z.string().min(1, 'Le prénom est requis').max(50),
   lastName: z.string().min(1, 'Le nom est requis').max(50),
   phone: z.string().regex(/^\+?[0-9\s-]{8,20}$/, 'Téléphone invalide'),
@@ -16,9 +16,23 @@ export const employeeCreateSchema = z.object({
   agencyId: z.string().min(1, 'L\'agence est requise'),
   position: z.string().min(1, 'Le poste est requis'),
   observation: z.string().max(500).optional().or(z.literal('')),
+  accountMode: z.enum(['none', 'existing', 'new']).optional().or(z.literal('')),
+  userId: z.string().optional().or(z.literal('')),
+  password: z.string().optional().or(z.literal('')),
+  confirmPassword: z.string().optional().or(z.literal('')),
 });
 
-export const employeeUpdateSchema = employeeCreateSchema.partial();
+export const employeeCreateSchema = employeeBaseSchema.superRefine((data, ctx) => {
+  if (data.accountMode === 'existing') {
+    if (!data.userId) ctx.addIssue({ code: 'custom', message: 'Sélectionnez un utilisateur à lier', path: ['userId'] });
+  } else if (data.accountMode === 'new') {
+    if (!data.password) ctx.addIssue({ code: 'custom', message: 'Le mot de passe est requis', path: ['password'] });
+    else if (data.password.length < 8) ctx.addIssue({ code: 'custom', message: 'Le mot de passe doit contenir au moins 8 caractères', path: ['password'] });
+    if (data.password && data.confirmPassword !== data.password) ctx.addIssue({ code: 'custom', message: 'Les mots de passe ne correspondent pas', path: ['confirmPassword'] });
+  }
+});
+
+export const employeeUpdateSchema = employeeBaseSchema.partial();
 
 export const userCreateSchema = z.object({
   employeeId: z.string().optional().or(z.literal('')),
@@ -54,6 +68,9 @@ export function employeeToFormValues(emp) {
     hireDate: emp.hireDate || '', employeeCode: emp.employeeCode || '',
     agencyId: emp.agencyId || '', position: emp.position || '',
     observation: emp.observation || '',
+    accountMode: emp.userId ? 'existing' : 'none',
+    userId: emp.userId || '',
+    password: '', confirmPassword: '',
   };
 }
 

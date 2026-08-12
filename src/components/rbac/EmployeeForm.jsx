@@ -6,23 +6,33 @@ import toast from 'react-hot-toast';
 import { useNavigate } from 'react-router-dom';
 import { employeeCreateSchema, employeeUpdateSchema, employeeToFormValues } from '../../helpers/rbacValidation';
 import { EMPLOYEE_POSITIONS, EMPLOYEE_STATUS } from '../../config/constants';
-import { mockAgenciesService } from '../../api/mockAgencies';
+import { agenciesService } from '../../api/agenciesService';
+import { usersService } from '../../api/usersService';
 import { useAuth } from '../../hooks/useAuth';
 
 export default function EmployeeForm({ initialData, isEdit = false, onSubmit }) {
   const { companyId } = useAuth();
   const navigate = useNavigate();
   const [agencies, setAgencies] = useState([]);
+  const [users, setUsers] = useState([]);
   const [loading, setLoading] = useState(false);
 
-  const { register, handleSubmit, formState: { errors }, reset } = useForm({
+  const { register, handleSubmit, watch, formState: { errors }, reset } = useForm({
     resolver: zodResolver(isEdit ? employeeUpdateSchema : employeeCreateSchema),
-    defaultValues: isEdit ? employeeToFormValues(initialData) : { nationality: 'Camerounaise', status: 'active' },
+    defaultValues: isEdit ? employeeToFormValues(initialData) : { nationality: 'Camerounaise', status: 'active', accountMode: 'none' },
   });
 
+  const accountMode = watch('accountMode') || 'none';
+
   useEffect(() => {
-    mockAgenciesService.getAll(companyId, { perPage: 100 }).then((r) => setAgencies(r.data || []));
+    agenciesService.getAll(companyId, { perPage: 100 }).then((r) => setAgencies(r.data || []));
   }, [companyId]);
+
+  useEffect(() => {
+    if (accountMode === 'existing') {
+      usersService.getAll(companyId, { perPage: 200 }).then((r) => setUsers(r.data || []));
+    }
+  }, [accountMode, companyId]);
 
   useEffect(() => {
     if (isEdit && initialData) reset(employeeToFormValues(initialData));
@@ -181,6 +191,59 @@ export default function EmployeeForm({ initialData, isEdit = false, onSubmit }) 
           </Form.Group>
         </Card.Body>
       </Card>
+
+      {!isEdit && (
+        <Card className="border-0 shadow-sm mb-4">
+          <Card.Body className="p-4">
+            <h6 className="fw-semibold mb-3">Compte de connexion</h6>
+            <Row>
+              <Col md={4}>
+                <Form.Group className="mb-3">
+                  <Form.Label>Accès au système</Form.Label>
+                  <Form.Select {...register('accountMode')}>
+                    <option value="none">Aucun compte</option>
+                    <option value="existing">Lier un utilisateur existant</option>
+                    <option value="new">Créer un compte</option>
+                  </Form.Select>
+                  <Form.Text className="text-muted">Permet à l'employé de se connecter à son espace.</Form.Text>
+                </Form.Group>
+              </Col>
+              {accountMode === 'existing' && (
+                <Col md={8}>
+                  <Form.Group className="mb-3">
+                    <Form.Label>Utilisateur *</Form.Label>
+                    <Form.Select {...register('userId')} isInvalid={!!errors.userId}>
+                      <option value="">Sélectionner</option>
+                      {users.map((u) => (
+                        <option key={u.id} value={u.id}>{u.firstName} {u.lastName} — {u.email}</option>
+                      ))}
+                    </Form.Select>
+                    <Form.Control.Feedback type="invalid">{errors.userId?.message}</Form.Control.Feedback>
+                  </Form.Group>
+                </Col>
+              )}
+              {accountMode === 'new' && (
+                <>
+                  <Col md={4}>
+                    <Form.Group className="mb-3">
+                      <Form.Label>Mot de passe *</Form.Label>
+                      <Form.Control type="password" {...register('password')} isInvalid={!!errors.password} placeholder="8+ caractères" />
+                      <Form.Control.Feedback type="invalid">{errors.password?.message}</Form.Control.Feedback>
+                    </Form.Group>
+                  </Col>
+                  <Col md={4}>
+                    <Form.Group className="mb-3">
+                      <Form.Label>Confirmer le mot de passe *</Form.Label>
+                      <Form.Control type="password" {...register('confirmPassword')} isInvalid={!!errors.confirmPassword} />
+                      <Form.Control.Feedback type="invalid">{errors.confirmPassword?.message}</Form.Control.Feedback>
+                    </Form.Group>
+                  </Col>
+                </>
+              )}
+            </Row>
+          </Card.Body>
+        </Card>
+      )}
 
       <div className="d-flex justify-content-end gap-2">
         <Button variant="outline-secondary" onClick={() => navigate(-1)}>Annuler</Button>

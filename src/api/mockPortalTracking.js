@@ -153,9 +153,13 @@ const trackingDB = [
 ];
 
 export const PORTAL_TRACKING_STATUS = {
+  registered: { label: 'Enregistré', color: 'info', step: 1 },
+  validated: { label: 'Validé', color: 'info', step: 2 },
   pending_payment: { label: 'En attente', color: 'warning', step: 1 },
   payment_validated: { label: 'Paiement validé', color: 'info', step: 2 },
+  preparing: { label: 'En préparation', color: 'warning', step: 3 },
   preparation: { label: 'En préparation', color: 'info', step: 3 },
+  assigned: { label: 'Assigné', color: 'info', step: 4 },
   loading: { label: 'En chargement', color: 'warning', step: 4 },
   in_transit: { label: 'En transport', color: 'primary', step: 5 },
   arrived: { label: 'Arrivé à destination', color: 'success', step: 6 },

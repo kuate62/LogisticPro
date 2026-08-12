@@ -6,7 +6,7 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import toast from 'react-hot-toast';
 import { useRoute, useRouteForm } from '../../hooks/useTransportRoute';
 import { routeFormSchema, routeToFormValues, routeFormValuesToPayload } from '../../helpers/routeValidation';
-import { mockAgenciesService } from '../../api/mockAgencies';
+import { agenciesService } from '../../api/agenciesService';
 import { useAuth } from '../../hooks/useAuth';
 
 export function RouteEditPage() {
@@ -23,7 +23,7 @@ export function RouteEditPage() {
   }, [id, fetch, clearSelected]);
 
   useEffect(() => {
-    mockAgenciesService.getAll(companyId, { perPage: 100 }).then((res) => setAgencies(res.data || []));
+    agenciesService.getAll(companyId, { perPage: 100 }).then((res) => setAgencies(res.data || []));
   }, [companyId]);
 
   const {

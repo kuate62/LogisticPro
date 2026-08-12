@@ -18,7 +18,7 @@ import './RegisterPage.css';
 
 export function RegisterPage() {
   const navigate = useNavigate();
-  const { register, clearError } = useAuth();
+  const { register} = useAuth();
   const firstNameRef = useRef(null);
 
   const {
@@ -31,13 +31,24 @@ export function RegisterPage() {
     setValue,
   } = useForm({
     schema: registerSchema,
+    initialValues: {
+      firstName: '',
+      lastName: '',
+      email: '',
+      phone: '',
+      password: '',
+      confirmPassword: '',
+      acceptTerms: false,
+      acceptPrivacy: false,
+    },
     onSubmit: async (data) => {
       await register({
-        firstName: data.firstName,
-        lastName: data.lastName,
+        firstname: data.firstName,
+        lastname: data.lastName,
         email: data.email,
         phone: data.phone,
         password: data.password,
+        confirmPassword: data.confirmPassword,
       });
     },
   });
@@ -46,13 +57,11 @@ export function RegisterPage() {
     firstNameRef.current?.focus();
   }, []);
 
-  useEffect(() => {
-    clearError();
-  }, [clearError]);
 
   const onSubmit = async (e) => {
     try {
-      await handleSubmit(e);
+      const result = await handleSubmit(e);
+      if (result === false) return;
       toast.success('Compte créé avec succès ! Vérifiez votre email.');
       navigate('/verify-email');
     } catch {
@@ -127,7 +136,9 @@ export function RegisterPage() {
           <label className="lp-register-form__checkbox">
             <input
               type="checkbox"
+              name="acceptTerms"
               className="lp-register-form__checkbox-input"
+              checked={values.acceptTerms || false}
               onChange={(e) => setValue('acceptTerms', e.target.checked)}
             />
             <span className="lp-register-form__checkbox-custom" />
@@ -145,7 +156,9 @@ export function RegisterPage() {
           <label className="lp-register-form__checkbox">
             <input
               type="checkbox"
+              name="acceptPrivacy"
               className="lp-register-form__checkbox-input"
+              checked={values.acceptPrivacy || false}
               onChange={(e) => setValue('acceptPrivacy', e.target.checked)}
             />
             <span className="lp-register-form__checkbox-custom" />

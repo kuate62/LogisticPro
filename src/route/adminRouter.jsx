@@ -1,4 +1,5 @@
 import SuperAdminDashboard from '../pages/admin/SuperAdminDashboard';
+import RequestsPage from '../pages/admin/RequestsPage';
 import PlansPage from '../pages/admin/PlansPage';
 import SubscriptionsPage from '../pages/admin/SubscriptionsPage';
 import CompaniesPage from '../pages/admin/CompaniesPage';
@@ -18,6 +19,7 @@ const adminRouter = [
   { path: '/admin/companies/create', element: <CompanyCreatePage /> },
   { path: '/admin/companies/:id/edit', element: <CompanyEditPage /> },
   { path: '/admin/companies/:id', element: <CompanyDetailPage /> },
+  { path: '/admin/requests', element: <RequestsPage /> },
   { path: '/admin/super-admins', element: <SuperAdminsPage /> },
   { path: '/admin/managers', element: <ManagersPage /> },
   { path: '/admin/notifications', element: <NotificationsPage /> },

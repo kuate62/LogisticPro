@@ -6,7 +6,7 @@ import toast from 'react-hot-toast';
 import { useNavigate } from 'react-router-dom';
 import { clientCreateSchema, clientUpdateSchema, clientToFormValues } from '../../helpers/clientValidation';
 import { CLIENT_DOCUMENT_TYPES, CONGO_PROVINCES } from '../../config/constants';
-import { mockAgenciesService } from '../../api/mockAgencies';
+import { agenciesService } from '../../api/agenciesService';
 import { useAuth } from '../../hooks/useAuth';
 
 export default function ClientForm({ initialData, isEdit = false, onSubmit }) {
@@ -21,7 +21,7 @@ export default function ClientForm({ initialData, isEdit = false, onSubmit }) {
   });
 
   useEffect(() => {
-    mockAgenciesService.getAll(companyId, { perPage: 100 }).then((r) => setAgencies(r.data || []));
+    agenciesService.getAll(companyId, { perPage: 100 }).then((r) => setAgencies(r.data || []));
   }, [companyId]);
 
   useEffect(() => {

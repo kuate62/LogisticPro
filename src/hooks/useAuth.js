@@ -5,13 +5,17 @@ import { AUTH_STATUS } from '../config/constants';
 export function useAuth() {
   const {
     user,
+    token,
     status,
     error,
     login,
     register,
     logout,
     forgotPassword,
+    verifyResetCode,
     resetPassword,
+    verifyEmail,
+    regenerateCode,
     checkAuth,
     clearError,
   } = useAuthStore();
@@ -32,6 +36,8 @@ export function useAuth() {
 
   return {
     user,
+    token,
+    companyId: user?.companyId ?? null,
     status,
     error,
     isLoading,
@@ -41,7 +47,10 @@ export function useAuth() {
     register,
     logout,
     forgotPassword,
+    verifyResetCode,
     resetPassword,
+    verifyEmail,
+    regenerateCode,
     checkAuth,
     clearError,
     hasRole,

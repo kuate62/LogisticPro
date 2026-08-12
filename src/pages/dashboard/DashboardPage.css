@@ -213,6 +213,21 @@
   margin: 0;
 }
 
+.lp-alert-item__event {
+  font-size: var(--font-size-xs);
+  color: var(--color-text-secondary);
+  margin: 2px 0 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.lp-alert-item__time {
+  font-size: var(--font-size-xs);
+  color: var(--color-text-muted);
+  white-space: nowrap;
+}
+
 .lp-alert-item__days {
   font-size: var(--font-size-xs);
   font-weight: var(--font-weight-bold);

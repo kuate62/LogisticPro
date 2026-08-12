@@ -6,6 +6,7 @@ import SearchBar from '../../components/rbac/SearchBar';
 import ListSkeleton from '../../components/rbac/ListSkeleton';
 import EmptyState from '../../components/rbac/EmptyState';
 import EmployeeTable from '../../components/rbac/EmployeeTable';
+import Avatar from '../../components/rbac/Avatar';
 import PaginationBar from '../../components/rbac/PaginationBar';
 import { EMPLOYEE_STATUS, EMPLOYEE_POSITIONS } from '../../config/constants';
 import toast from 'react-hot-toast';
@@ -66,9 +67,7 @@ export default function EmployeeListPage() {
               <div key={emp.id} className="col-md-6 col-lg-4">
                 <div className="bg-white rounded-3 shadow-sm p-3 h-100">
                   <div className="d-flex align-items-center gap-3 mb-2">
-                    <div className="bg-primary text-white rounded-circle d-flex align-items-center justify-content-center fw-semibold" style={{ width: 40, height: 40, fontSize: 14 }}>
-                      {(emp.firstName[0] || '') + (emp.lastName[0] || '')}
-                    </div>
+                    <Avatar firstName={emp.firstName} lastName={emp.lastName} size={40} src={emp.avatar} />
                     <div>
                       <div className="fw-medium">{emp.firstName} {emp.lastName}</div>
                       <small className="text-muted">{EMPLOYEE_POSITIONS[emp.position] || emp.position}</small>

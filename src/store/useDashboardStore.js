@@ -1,5 +1,5 @@
 import { create } from 'zustand';
-import { mockDashboardService } from '../api/mockDashboard';
+import { dashboardService } from '../api/dashboardService';
 
 const useDashboardStore = create((set) => ({
   kpis: null,
@@ -49,7 +49,7 @@ const useDashboardStore = create((set) => ({
       errors: {},
     }));
     try {
-      const data = await mockDashboardService.getAll(companyId);
+      const data = await dashboardService.getAll(companyId);
       set({
         kpis: data.kpis,
         charts: data.charts,
